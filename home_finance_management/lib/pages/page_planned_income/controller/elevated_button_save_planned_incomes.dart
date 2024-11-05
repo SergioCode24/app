@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/pages/page_planned_income/model/selected_currency_planned_incomes.dart';
 import 'package:http/http.dart' as http;
-import 'package:home_finance_management/pages/page_planned_income/components/database_helper_for_planned_incomes.dart';
 import 'package:home_finance_management/pages/page_planned_income/components/filter_planned_incomes.dart';
 import 'package:home_finance_management/pages/page_planned_income/components/show_error_dialog_for_planned_incomes.dart';
 import 'package:home_finance_management/pages/page_planned_income/model/text_controller_planned_incomes.dart';
@@ -64,7 +64,7 @@ class _ElevatedButtonSavePlannedIncomesState
           convertedSum = sum;
         }
 
-        final dbHelper = DatabaseHelperForPlannedIncomes();
+        final dbHelper = DatabaseHelper();
         final id = await dbHelper.insertPlannedIncome({
           'date': plannedIncomeSelectedDate.toIso8601String(),
           'sum': convertedSum,

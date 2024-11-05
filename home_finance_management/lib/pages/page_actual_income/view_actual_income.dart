@@ -5,7 +5,7 @@ import 'package:home_finance_management/pages/page_actual_income/controller/wrap
 import 'package:home_finance_management/pages/page_actual_income/controller/elevated_button_save_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/controller/elevated_button_select_date_actual_incomes.dart';
 import 'package:home_finance_management/controller/drawer_menu.dart';
-import 'package:home_finance_management/pages/page_actual_income/components/database_helper_for_actual_incomes.dart';
+import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/pages/page_actual_income/components/filter_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/controller/list_tile_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/controller/text_field_enter_for_actual_incomes.dart';

@@ -3,7 +3,10 @@ class PlannedIncomes {
   DateTime datePlannedIncomes;
   double sumPlannedIncomes;
 
-  PlannedIncomes({required this.idPlannedIncomes, required this.datePlannedIncomes, required this.sumPlannedIncomes});
+  PlannedIncomes(
+      {required this.idPlannedIncomes,
+      required this.datePlannedIncomes,
+      required this.sumPlannedIncomes});
 }
 
 List<PlannedIncomes> listPlannedIncomes = [];

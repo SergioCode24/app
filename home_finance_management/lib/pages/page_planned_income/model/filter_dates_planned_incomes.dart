@@ -9,6 +9,6 @@ class FilterForPlannedIncomes {
 
 List<FilterForPlannedIncomes> filterDatesPlannedIncomes = [
   FilterForPlannedIncomes(
-      startDatePlannedIncomes: DateTime.now(),
+      startDatePlannedIncomes: DateTime.now().subtract(const Duration(days: 1)),
       endDatePlannedIncomes: DateTime(2124))
 ];

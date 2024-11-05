@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/pages/page_planned_income/components/show_error_dialog_for_planned_incomes.dart';
 import 'package:intl/intl.dart';
-import 'package:home_finance_management/pages/page_planned_income/components/database_helper_for_planned_incomes.dart';
 import 'package:home_finance_management/pages/page_planned_income/model/filtered_planned_incomes_list.dart';
 import 'package:home_finance_management/pages/page_planned_income/model/list_planned_incomes.dart';
 import 'package:home_finance_management/pages/page_planned_income/components/filter_planned_incomes.dart';
@@ -125,8 +125,7 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
                                 filterPlannedIncomes(
                                     widget.updatePlannedIncomes);
 
-                                final dbHelper =
-                                    DatabaseHelperForPlannedIncomes();
+                                final dbHelper = DatabaseHelper();
                                 await dbHelper.updatePlannedIncome({
                                   'id': filteredPlannedIncomesList[widget.index]
                                       .idPlannedIncomes,
@@ -149,7 +148,7 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () async {
-              final dbHelper = DatabaseHelperForPlannedIncomes();
+              final dbHelper = DatabaseHelper();
               await dbHelper.deletePlannedIncome(
                   filteredPlannedIncomesList[widget.index].idPlannedIncomes);
               listPlannedIncomes.removeWhere((plannedIncome) =>

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home_finance_management/pages/page_actual_income/components/show_error_dialog_for_actual_incomes.dart';
 import 'package:intl/intl.dart';
-import 'package:home_finance_management/pages/page_actual_income/components/database_helper_for_actual_incomes.dart';
+import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/pages/page_actual_income/model/filtered_actual_incomes_list.dart';
 import 'package:home_finance_management/pages/page_actual_income/model/list_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/components/filter_actual_incomes.dart';
@@ -125,7 +125,7 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
                                 filterActualIncomes(widget.updateActualIncomes);
 
                                 final dbHelper =
-                                    DatabaseHelperForActualIncomes();
+                                    DatabaseHelper();
                                 await dbHelper.updateActualIncome({
                                   'id': filteredActualIncomesList[widget.index]
                                       .idActualIncomes,
@@ -148,7 +148,7 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () async {
-              final dbHelper = DatabaseHelperForActualIncomes();
+              final dbHelper = DatabaseHelper();
               await dbHelper.deleteActualIncome(
                   filteredActualIncomesList[widget.index].idActualIncomes);
               listActualIncomes.removeWhere((plannedIncome) =>

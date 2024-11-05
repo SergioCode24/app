@@ -28,6 +28,7 @@ class _WrapFilterButtonsForPlannedIncomesState
             Expanded(
               child: ElevatedButton(
                 onPressed: () async {
+                  print(DateTime.now().subtract(const Duration(days: 1)));
                   final DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
@@ -75,7 +76,7 @@ class _WrapFilterButtonsForPlannedIncomesState
               filteredPlannedIncomesList = listPlannedIncomes;
               filterDatesPlannedIncomes = [
                 FilterForPlannedIncomes(
-                    startDatePlannedIncomes: DateTime.now(),
+                    startDatePlannedIncomes: DateTime.now().subtract(const Duration(days: 1)),
                     endDatePlannedIncomes: DateTime(2124))
               ];
               filterPlannedIncomes(widget.updatePlannedIncomes);
