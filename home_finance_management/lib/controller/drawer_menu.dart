@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../pages/page_actual_expenses/view_actual_expenses.dart';
-import '../pages/page_actual_income/view_actual_income.dart';
-import '../pages/page_history/view_history.dart';
-import '../pages/page_planned_expenses/view_planned_expenses.dart';
-import '../pages/page_planned_income/view_planned_income.dart';
-import '../pages/page_statistics/view_statistics.dart';
+import 'package:home_finance_management/pages/page_actual_expenses/view_actual_expenses.dart';
+import 'package:home_finance_management/pages/page_actual_income/view_actual_income.dart';
+import 'package:home_finance_management/pages/page_history/view_history.dart';
+import 'package:home_finance_management/pages/page_planned_expenses/view_planned_expenses.dart';
+import 'package:home_finance_management/pages/page_planned_income/view_planned_income.dart';
+import 'package:home_finance_management/pages/page_statistics/view_statistics.dart';
 
 class DrawerMenu extends StatelessWidget {
   final bool actualIncomePage;

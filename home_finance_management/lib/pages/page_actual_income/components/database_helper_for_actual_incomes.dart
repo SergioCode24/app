@@ -3,7 +3,8 @@ import 'package:path/path.dart';
 import 'package:home_finance_management/pages/page_actual_income/model/list_actual_incomes.dart';
 
 class DatabaseHelperForActualIncomes {
-  static final DatabaseHelperForActualIncomes instance = DatabaseHelperForActualIncomes.internal();
+  static final DatabaseHelperForActualIncomes instance =
+      DatabaseHelperForActualIncomes.internal();
 
   factory DatabaseHelperForActualIncomes() => instance;
 
@@ -77,7 +78,7 @@ Future<List<ActualIncomes>> getActualIncomesFromDatabase() async {
   return actualIncomesListFromDB.map((actualIncomesFromDB) {
     return ActualIncomes(
       idActualIncomes: actualIncomesFromDB['id'],
-      dateActualIncomes: DateTime.parse(actualIncomesFromDB['date']), // Преобразование строки в DateTime
+      dateActualIncomes: DateTime.parse(actualIncomesFromDB['date']),
       sumActualIncomes: actualIncomesFromDB['sum'],
     );
   }).toList();

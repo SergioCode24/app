@@ -4,11 +4,15 @@ import 'package:home_finance_management/pages/page_actual_income/model/list_actu
 
 void filterActualIncomes(Function updateState) {
   filteredActualIncomesList = listActualIncomes.where((actualIncome) {
-    return (actualIncome.dateActualIncomes.isAfter(filterDatesActualIncomes[0].startDateActualIncomes) ||
-        actualIncome.dateActualIncomes.isAtSameMomentAs(filterDatesActualIncomes[0].startDateActualIncomes)) &&
-        (actualIncome.dateActualIncomes.isBefore(filterDatesActualIncomes[0].endDateActualIncomes) ||
-            actualIncome.dateActualIncomes.isAtSameMomentAs(filterDatesActualIncomes[0].endDateActualIncomes));
+    return (actualIncome.dateActualIncomes
+                .isAfter(filterDatesActualIncomes[0].startDateActualIncomes) ||
+            actualIncome.dateActualIncomes.isAtSameMomentAs(
+                filterDatesActualIncomes[0].startDateActualIncomes)) &&
+        (actualIncome.dateActualIncomes
+                .isBefore(filterDatesActualIncomes[0].endDateActualIncomes) ||
+            actualIncome.dateActualIncomes.isAtSameMomentAs(
+                filterDatesActualIncomes[0].endDateActualIncomes));
   }).toList();
 
-  updateState(); // Обновление состояния
+  updateState();
 }

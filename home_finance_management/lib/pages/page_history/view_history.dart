@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../controller/drawer_menu.dart';
-import '../../controller/icon_button_menu.dart';
+import 'package:home_finance_management/controller/drawer_menu.dart';
+import 'package:home_finance_management/controller/icon_button_menu.dart';
 
 class ViewHistory extends StatefulWidget {
   const ViewHistory({super.key});

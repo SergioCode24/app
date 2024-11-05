@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:home_finance_management/pages/page_statistics/view_statistics.dart';
-
 import 'pages/page_actual_income/components/database_helper_for_actual_incomes.dart';
 
 Future<void> main() async {

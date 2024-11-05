@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class TextButtonCancelAlertDialogForPlannedIncomes extends StatelessWidget {
   final String text;
 
-  const TextButtonCancelAlertDialogForPlannedIncomes({super.key, required this.text});
+  const TextButtonCancelAlertDialogForPlannedIncomes(
+      {super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

@@ -17,13 +17,12 @@ class ViewActualIncome extends StatefulWidget {
   const ViewActualIncome({super.key});
 
   @override
-  State<ViewActualIncome> createState() => _ViewActualIncome();
+  State<ViewActualIncome> createState() => _ViewActualIncomeState();
 }
 
-class _ViewActualIncome extends State<ViewActualIncome> {
+class _ViewActualIncomeState extends State<ViewActualIncome> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isLoadingActualIncomes = true;
-  String selectedCurrencyActualIncomes = 'RUB';
 
   void updateState() {
     setState(() {});
@@ -37,8 +36,9 @@ class _ViewActualIncome extends State<ViewActualIncome> {
 
   Future<void> initializeSymptoms() async {
     listActualIncomes = await getActualIncomesFromDatabase();
-    listActualIncomes.sort((a, b) => a.dateActualIncomes.compareTo(b.dateActualIncomes));
-    filterActualIncomes(updateState); // Обновление фильтрованного списка
+    listActualIncomes
+        .sort((a, b) => a.dateActualIncomes.compareTo(b.dateActualIncomes));
+    filterActualIncomes(updateState);
     setState(() {
       isLoadingActualIncomes = false;
     });
@@ -79,11 +79,11 @@ class _ViewActualIncome extends State<ViewActualIncome> {
                       Expanded(
                         child: TextFieldEnterForActualIncomes(
                             labelText: 'Введите доход',
-                            textControllerActualIncomes: textControllerActualIncomes,
+                            textControllerActualIncomes:
+                                textControllerActualIncomes,
                             keyboardType: TextInputType.number),
                       ),
-                      DropdownButtonCurrencyForActualIncomes(
-                          selectedCurrencyActualIncomes: selectedCurrencyActualIncomes),
+                      const DropdownButtonCurrencyForActualIncomes(),
                     ],
                   ),
                   Row(children: [
@@ -92,8 +92,7 @@ class _ViewActualIncome extends State<ViewActualIncome> {
                     ),
                     Expanded(
                       child: ElevatedButtonSaveActualIncomes(
-                          updateActualIncomes: updateState,
-                          selectedCurrencyActualIncomes: selectedCurrencyActualIncomes),
+                          updateActualIncomes: updateState),
                     ),
                   ]),
                   Expanded(
@@ -108,7 +107,8 @@ class _ViewActualIncome extends State<ViewActualIncome> {
                     ),
                   ),
                   if (listActualIncomes.isNotEmpty)
-                    WrapFilterButtonsForActualIncomes(updateActualIncomes: updateState),
+                    WrapFilterButtonsForActualIncomes(
+                        updateActualIncomes: updateState),
                 ],
               ),
             ),

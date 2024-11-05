@@ -19,35 +19,38 @@ class ListTileActualIncomes extends StatefulWidget {
   });
 
   @override
-  State<ListTileActualIncomes> createState() => _ListTileActualIncomes(index);
+  State<ListTileActualIncomes> createState() => _ListTileActualIncomesState();
 }
 
-class _ListTileActualIncomes extends State<ListTileActualIncomes> {
-  final int index;
+class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
   DateTime? selectedDate;
   TextEditingController? sumControllerActualIncomes;
-
-  _ListTileActualIncomes(this.index);
 
   @override
   void initState() {
     super.initState();
-    sumControllerActualIncomes = TextEditingController(); // Инициализация sumController
+    sumControllerActualIncomes = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text('${filteredActualIncomesList[index].sumActualIncomes} рублей'),
-      subtitle: Text(DateFormat('d.M.y').format(filteredActualIncomesList[index].dateActualIncomes)),
+      title: Text(
+          '${filteredActualIncomesList[widget.index].sumActualIncomes} рублей'),
+      subtitle: Text(DateFormat('d.M.y')
+          .format(filteredActualIncomesList[widget.index].dateActualIncomes)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              sumControllerActualIncomes?.text = filteredActualIncomesList[index].sumActualIncomes.toString();
-              selectedDate = filteredActualIncomesList[index].dateActualIncomes;
+              sumControllerActualIncomes?.text =
+                  filteredActualIncomesList[widget.index]
+                      .sumActualIncomes
+                      .toString();
+              selectedDate =
+                  filteredActualIncomesList[widget.index].dateActualIncomes;
               showDialog(
                 context: context,
                 builder: (context) {
@@ -57,14 +60,17 @@ class _ListTileActualIncomes extends State<ListTileActualIncomes> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         TextFieldEnterForActualIncomes(
-                            textControllerActualIncomes: sumControllerActualIncomes,
+                            textControllerActualIncomes:
+                                sumControllerActualIncomes,
                             labelText: 'Введите доход',
                             keyboardType: TextInputType.number),
                         ElevatedButton(
                           onPressed: () async {
                             final DateTime? picked = await showDatePicker(
                               context: context,
-                              initialDate: filteredActualIncomesList[index].dateActualIncomes,
+                              initialDate:
+                                  filteredActualIncomesList[widget.index]
+                                      .dateActualIncomes,
                               firstDate: DateTime(2000),
                               lastDate: DateTime.now(),
                             );
@@ -84,9 +90,12 @@ class _ListTileActualIncomes extends State<ListTileActualIncomes> {
                         onPressed: () async {
                           double sum;
                           try {
-                            sum = double.parse(sumControllerActualIncomes!.text);
+                            sum =
+                                double.parse(sumControllerActualIncomes!.text);
                           } catch (e) {
-                            showErrorDialogForActualIncomes(context, 'Ошибка ввода',
+                            showErrorDialogForActualIncomes(
+                                context,
+                                'Ошибка ввода',
                                 'Пожалуйста, введите корректное числовое значение.');
                             return;
                           }
@@ -94,26 +103,32 @@ class _ListTileActualIncomes extends State<ListTileActualIncomes> {
                           if (sumControllerActualIncomes!.text.isNotEmpty &&
                               selectedDate != null) {
                             {
-                              final incomeIndex = listActualIncomes.indexWhere(
-                                      (income) =>
-                                  income.idActualIncomes == filteredActualIncomesList[index].idActualIncomes);
-                              if (incomeIndex != -1) {
-                                listActualIncomes[incomeIndex] = ActualIncomes(
-                                    idActualIncomes: filteredActualIncomesList[index].idActualIncomes,
-                                    dateActualIncomes: selectedDate!,
-                                    sumActualIncomes: sum);
+                              final actualIncomeIndex =
+                                  listActualIncomes.indexWhere((actualIncome) =>
+                                      actualIncome.idActualIncomes ==
+                                      filteredActualIncomesList[widget.index]
+                                          .idActualIncomes);
+                              if (actualIncomeIndex != -1) {
+                                listActualIncomes[actualIncomeIndex] =
+                                    ActualIncomes(
+                                        idActualIncomes:
+                                            filteredActualIncomesList[
+                                                    widget.index]
+                                                .idActualIncomes,
+                                        dateActualIncomes: selectedDate!,
+                                        sumActualIncomes: sum);
 
-                                // Сортировка списка по дате
-                                listActualIncomes
-                                    .sort((a, b) => a.dateActualIncomes.compareTo(b.dateActualIncomes));
+                                listActualIncomes.sort((a, b) => a
+                                    .dateActualIncomes
+                                    .compareTo(b.dateActualIncomes));
 
-                                // Обновление фильтрованного списка
                                 filterActualIncomes(widget.updateActualIncomes);
 
-                                // Обновление базы данных
-                                final dbHelper = DatabaseHelperForActualIncomes();
+                                final dbHelper =
+                                    DatabaseHelperForActualIncomes();
                                 await dbHelper.updateActualIncome({
-                                  'id': filteredActualIncomesList[index].idActualIncomes,
+                                  'id': filteredActualIncomesList[widget.index]
+                                      .idActualIncomes,
                                   'date': selectedDate!.toIso8601String(),
                                   'sum': sum,
                                 });
@@ -134,9 +149,11 @@ class _ListTileActualIncomes extends State<ListTileActualIncomes> {
             icon: const Icon(Icons.delete),
             onPressed: () async {
               final dbHelper = DatabaseHelperForActualIncomes();
-              await dbHelper.deleteActualIncome(filteredActualIncomesList[index].idActualIncomes);
-              listActualIncomes
-                  .removeWhere((income) => income.idActualIncomes == filteredActualIncomesList[index].idActualIncomes);
+              await dbHelper.deleteActualIncome(
+                  filteredActualIncomesList[widget.index].idActualIncomes);
+              listActualIncomes.removeWhere((plannedIncome) =>
+                  plannedIncome.idActualIncomes ==
+                  filteredActualIncomesList[widget.index].idActualIncomes);
               filterActualIncomes(widget.updateActualIncomes);
             },
           )

@@ -1,9 +1,10 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:home_finance_management/pages/page_planned_income//model/list_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/model/list_planned_incomes.dart';
 
 class DatabaseHelperForPlannedIncomes {
-  static final DatabaseHelperForPlannedIncomes instance = DatabaseHelperForPlannedIncomes.internal();
+  static final DatabaseHelperForPlannedIncomes instance =
+      DatabaseHelperForPlannedIncomes.internal();
 
   factory DatabaseHelperForPlannedIncomes() => instance;
 
@@ -76,9 +77,9 @@ Future<List<PlannedIncomes>> getPlannedIncomesFromDatabase() async {
   final plannedIncomesListFromDB = await dbHelper.getPlannedIncomes();
   return plannedIncomesListFromDB.map((plannedIncomesFromDB) {
     return PlannedIncomes(
-      id: plannedIncomesFromDB['id'],
-      date: DateTime.parse(plannedIncomesFromDB['date']), // Преобразование строки в DateTime
-      sum: plannedIncomesFromDB['sum'],
+      idPlannedIncomes: plannedIncomesFromDB['id'],
+      datePlannedIncomes: DateTime.parse(plannedIncomesFromDB['date']),
+      sumPlannedIncomes: plannedIncomesFromDB['sum'],
     );
   }).toList();
 }

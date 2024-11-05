@@ -7,19 +7,21 @@ import 'package:home_finance_management/pages/page_actual_income/components/show
 import 'package:home_finance_management/pages/page_actual_income/model/text_controller_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/model/list_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/model/actual_income_selected_date.dart';
+import 'package:home_finance_management/pages/page_actual_income/model/selected_currency_actual_incomes.dart';
 
 class ElevatedButtonSaveActualIncomes extends StatefulWidget {
   final VoidCallback updateActualIncomes;
-  final String selectedCurrencyActualIncomes;
 
   const ElevatedButtonSaveActualIncomes(
-      {super.key, required this.updateActualIncomes, required this.selectedCurrencyActualIncomes});
+      {super.key, required this.updateActualIncomes});
 
   @override
-  State<ElevatedButtonSaveActualIncomes> createState() => _ElevatedButtonSaveActualIncomes();
+  State<ElevatedButtonSaveActualIncomes> createState() =>
+      _ElevatedButtonSaveActualIncomes();
 }
 
-class _ElevatedButtonSaveActualIncomes extends State<ElevatedButtonSaveActualIncomes> {
+class _ElevatedButtonSaveActualIncomes
+    extends State<ElevatedButtonSaveActualIncomes> {
   final String apiKey = 'd3d37cccac2e9edeb3161e0f';
   final String apiUrl = 'https://api.exchangerate-api.com/v4/latest/';
 
@@ -51,11 +53,10 @@ class _ElevatedButtonSaveActualIncomes extends State<ElevatedButtonSaveActualInc
           return;
         }
 
-        // Конвертация валюты
         double convertedSum;
-        if (widget.selectedCurrencyActualIncomes != 'RUB') {
+        if (selectedCurrencyActualIncomes != 'RUB') {
           convertedSum = await convertCurrency(
-            widget.selectedCurrencyActualIncomes,
+            selectedCurrencyActualIncomes,
             'RUB',
             sum,
           );
@@ -69,15 +70,16 @@ class _ElevatedButtonSaveActualIncomes extends State<ElevatedButtonSaveActualInc
           'sum': convertedSum,
         });
 
-        final income =
-            ActualIncomes(idActualIncomes: id, dateActualIncomes: actualIncomeSelectedDate, sumActualIncomes: convertedSum);
-        listActualIncomes.add(income);
+        final actualIncome = ActualIncomes(
+            idActualIncomes: id,
+            dateActualIncomes: actualIncomeSelectedDate,
+            sumActualIncomes: convertedSum);
+        listActualIncomes.add(actualIncome);
         textControllerActualIncomes.clear();
 
-        // Сортировка списка по дате
-        listActualIncomes.sort((a, b) => a.dateActualIncomes.compareTo(b.dateActualIncomes));
+        listActualIncomes
+            .sort((a, b) => a.dateActualIncomes.compareTo(b.dateActualIncomes));
 
-        // Обновление фильтрованного списка
         filterActualIncomes(() {});
 
         widget.updateActualIncomes();

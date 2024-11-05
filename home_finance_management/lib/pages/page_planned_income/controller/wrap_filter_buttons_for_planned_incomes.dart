@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:home_finance_management/pages/page_actual_income/components/filter_actual_incomes.dart';
-import 'package:home_finance_management/pages/page_actual_income/model/filter_dates_actual_incomes.dart';
-import 'package:home_finance_management/pages/page_actual_income/model/filtered_actual_incomes_list.dart';
-import 'package:home_finance_management/pages/page_actual_income/model/list_actual_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/components/filter_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/model/filter_dates_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/model/filtered_planned_incomes_list.dart';
+import 'package:home_finance_management/pages/page_planned_income/model/list_planned_incomes.dart';
 
-class WrapFilterButtonsForActualIncomes extends StatefulWidget {
-  final VoidCallback updateActualIncomes;
+class WrapFilterButtonsForPlannedIncomes extends StatefulWidget {
+  final VoidCallback updatePlannedIncomes;
 
-  const WrapFilterButtonsForActualIncomes(
-      {super.key, required this.updateActualIncomes});
+  const WrapFilterButtonsForPlannedIncomes(
+      {super.key, required this.updatePlannedIncomes});
 
   @override
-  State<WrapFilterButtonsForActualIncomes> createState() =>
-      _WrapFilterButtonsForActualIncomesState();
+  State<WrapFilterButtonsForPlannedIncomes> createState() =>
+      _WrapFilterButtonsForPlannedIncomesState();
 }
 
-class _WrapFilterButtonsForActualIncomesState
-    extends State<WrapFilterButtonsForActualIncomes> {
+class _WrapFilterButtonsForPlannedIncomesState
+    extends State<WrapFilterButtonsForPlannedIncomes> {
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -31,14 +31,14 @@ class _WrapFilterButtonsForActualIncomesState
                   final DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2124),
                   );
                   if (picked != null) {
                     setState(() {
-                      filterDatesActualIncomes[0].startDateActualIncomes =
+                      filterDatesPlannedIncomes[0].startDatePlannedIncomes =
                           picked;
-                      filterActualIncomes(widget.updateActualIncomes);
+                      filterPlannedIncomes(widget.updatePlannedIncomes);
                     });
                   }
                 },
@@ -52,13 +52,14 @@ class _WrapFilterButtonsForActualIncomesState
                   final DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2124),
                   );
                   if (picked != null) {
                     setState(() {
-                      filterDatesActualIncomes[0].endDateActualIncomes = picked;
-                      filterActualIncomes(widget.updateActualIncomes);
+                      filterDatesPlannedIncomes[0].endDatePlannedIncomes =
+                          picked;
+                      filterPlannedIncomes(widget.updatePlannedIncomes);
                     });
                   }
                 },
@@ -71,13 +72,13 @@ class _WrapFilterButtonsForActualIncomesState
         ElevatedButton(
           onPressed: () {
             setState(() {
-              filteredActualIncomesList = listActualIncomes;
-              filterDatesActualIncomes = [
-                FilterForActualIncomes(
-                    startDateActualIncomes: DateTime(2000, 1, 1),
-                    endDateActualIncomes: DateTime.now())
+              filteredPlannedIncomesList = listPlannedIncomes;
+              filterDatesPlannedIncomes = [
+                FilterForPlannedIncomes(
+                    startDatePlannedIncomes: DateTime.now(),
+                    endDatePlannedIncomes: DateTime(2124))
               ];
-              filterActualIncomes(widget.updateActualIncomes);
+              filterPlannedIncomes(widget.updatePlannedIncomes);
             });
           },
           child: const Text('Сбросить фильтр', textAlign: TextAlign.center),

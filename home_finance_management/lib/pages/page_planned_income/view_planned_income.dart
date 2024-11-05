@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:home_finance_management/controller/icon_button_menu.dart';
-import 'package:home_finance_management/pages/page_actual_income/controller/dropdown_button_currency_for_actual_incomes.dart';
-import 'package:home_finance_management/pages/page_actual_income/controller/wrap_filter_buttons_for_actual_incomes.dart';
-import 'package:home_finance_management/pages/page_actual_income/controller/elevated_button_save_actual_incomes.dart';
-import 'package:home_finance_management/pages/page_actual_income/controller/elevated_button_select_date_actual_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/controller/dropdown_button_currency_for_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/controller/elevated_button_save_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/controller/elevated_button_select_date_planned_incomes.dart';
 import 'package:home_finance_management/controller/drawer_menu.dart';
-import 'components/database_helper_for_planned_incomes.dart';
-import 'components/filter_planned_incomes.dart';
-import 'controller/list_tile_incomes.dart';
-import 'controller/text_field_enter.dart';
-import 'model/text_controller.dart';
-import 'model/filtered_list.dart';
-import 'model/list_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/components/database_helper_for_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/components/filter_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/controller/list_tile_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/controller/text_field_enter_for_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/controller/wrap_filter_buttons_for_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/model/text_controller_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_income/model/filtered_planned_incomes_list.dart';
+import 'package:home_finance_management/pages/page_planned_income/model/list_planned_incomes.dart';
 
 class ViewPlannedIncome extends StatefulWidget {
   const ViewPlannedIncome({super.key});
 
   @override
-  State<ViewPlannedIncome> createState() => _ViewPlannedIncome();
+  State<ViewPlannedIncome> createState() => _ViewPlannedIncomeState();
 }
 
-class _ViewPlannedIncome extends State<ViewPlannedIncome> {
+class _ViewPlannedIncomeState extends State<ViewPlannedIncome> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isLoading = true;
-  String selectedCurrency = 'RUB';
 
   void updateState() {
     setState(() {});
@@ -37,8 +36,9 @@ class _ViewPlannedIncome extends State<ViewPlannedIncome> {
 
   Future<void> _initializeSymptoms() async {
     listPlannedIncomes = await getPlannedIncomesFromDatabase();
-    listPlannedIncomes.sort((a, b) => a.date.compareTo(b.date));
-    filterPlannedIncomes(updateState); // Обновление фильтрованного списка
+    listPlannedIncomes
+        .sort((a, b) => a.datePlannedIncomes.compareTo(b.datePlannedIncomes));
+    filterPlannedIncomes(updateState);
     setState(() {
       isLoading = false;
     });
@@ -77,38 +77,38 @@ class _ViewPlannedIncome extends State<ViewPlannedIncome> {
                   Row(
                     children: [
                       Expanded(
-                        child: TextFieldEnter(
+                        child: TextFieldEnterForPlannedIncomes(
                             labelText: 'Введите доход',
-                            controller: textController,
+                            textControllerPlannedIncomes:
+                                textControllerPlannedIncomes,
                             keyboardType: TextInputType.number),
                       ),
-                      DropdownButtonCurrencyForActualIncomes(
-                          selectedCurrencyActualIncomes: selectedCurrency),
+                      const DropdownButtonCurrencyForPlannedIncomes(),
                     ],
                   ),
                   Row(children: [
                     const Expanded(
-                      child: ElevatedButtonSelectDateActualIncomes(),
+                      child: ElevatedButtonSelectDatePlannedIncomes(),
                     ),
                     Expanded(
-                      child: ElevatedButtonSaveActualIncomes(
-                          updateActualIncomes: updateState,
-                          selectedCurrencyActualIncomes: selectedCurrency),
+                      child: ElevatedButtonSavePlannedIncomes(
+                          updatePlannedIncomes: updateState),
                     ),
                   ]),
                   Expanded(
                     child: ListView.builder(
                       itemCount: filteredPlannedIncomesList.length,
                       itemBuilder: (context, index) {
-                        return ListTileIncomes(
-                          onSave: updateState,
+                        return ListTilePlannedIncomes(
+                          updatePlannedIncomes: updateState,
                           index: index,
                         );
                       },
                     ),
                   ),
                   if (listPlannedIncomes.isNotEmpty)
-                    WrapFilterButtonsForActualIncomes(updateActualIncomes: updateState),
+                    WrapFilterButtonsForPlannedIncomes(
+                        updatePlannedIncomes: updateState),
                 ],
               ),
             ),
