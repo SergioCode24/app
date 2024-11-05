@@ -66,8 +66,7 @@ class _ViewPlannedIncomeState extends State<ViewPlannedIncome> {
           actualExpensesPage: true,
           plannedIncomePage: false,
           plannedExpensesPage: true,
-          statisticsPage: true,
-          historyPage: true),
+          statisticsPage: true),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(

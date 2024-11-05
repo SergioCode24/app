@@ -34,8 +34,7 @@ class _ViewStatistics extends State<ViewStatistics> {
           actualExpensesPage: true,
           plannedIncomePage: true,
           plannedExpensesPage: true,
-          statisticsPage: false,
-          historyPage: true),
+          statisticsPage: false),
     );
   }
 

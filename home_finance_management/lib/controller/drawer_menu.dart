@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/view_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_income/view_actual_income.dart';
-import 'package:home_finance_management/pages/page_history/view_history.dart';
 import 'package:home_finance_management/pages/page_planned_expenses/view_planned_expenses.dart';
 import 'package:home_finance_management/pages/page_planned_income/view_planned_income.dart';
 import 'package:home_finance_management/pages/page_statistics/view_statistics.dart';
@@ -12,7 +11,6 @@ class DrawerMenu extends StatelessWidget {
   final bool plannedIncomePage;
   final bool plannedExpensesPage;
   final bool statisticsPage;
-  final bool historyPage;
 
   const DrawerMenu(
       {super.key,
@@ -20,8 +18,7 @@ class DrawerMenu extends StatelessWidget {
       required this.actualExpensesPage,
       required this.plannedIncomePage,
       required this.plannedExpensesPage,
-      required this.statisticsPage,
-      required this.historyPage});
+      required this.statisticsPage});
 
   @override
   Widget build(BuildContext context) {
@@ -128,24 +125,6 @@ class DrawerMenu extends StatelessWidget {
               }
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.history),
-            title: const Text(
-              'История',
-            ),
-            onTap: () {
-              if (historyPage == true) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ViewHistory(),
-                  ),
-                );
-              } else {
-                Navigator.pop(context);
-              }
-            },
-          )
         ],
       ),
     );

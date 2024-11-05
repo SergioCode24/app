@@ -34,8 +34,7 @@ class _ViewPlannedExpenses extends State<ViewPlannedExpenses> {
           actualExpensesPage: true,
           plannedIncomePage: true,
           plannedExpensesPage: false,
-          statisticsPage: true,
-          historyPage: true),
+          statisticsPage: true),
     );
   }
 
