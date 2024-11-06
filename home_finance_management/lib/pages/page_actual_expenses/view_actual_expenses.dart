@@ -12,6 +12,7 @@ import 'package:home_finance_management/pages/page_actual_expenses/controller/te
 import 'package:home_finance_management/pages/page_actual_expenses/model/text_controller_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/filtered_actual_expenses_list.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/list_actual_expenses.dart';
+import 'package:home_finance_management/pages/page_actual_expenses/controller/dropdown_button_category_for_actual_expenses.dart';
 
 class ViewActualExpenses extends StatefulWidget {
   const ViewActualExpenses({super.key});
@@ -85,6 +86,7 @@ class _ViewActualExpensesState extends State<ViewActualExpenses> {
                       const DropdownButtonCurrencyForActualExpenses(),
                     ],
                   ),
+                  const DropdownButtonCategoryForActualExpenses(),
                   Row(children: [
                     const Expanded(
                       child: ElevatedButtonSelectDateActualExpenses(),
