@@ -31,10 +31,10 @@ class _ViewPlannedIncomeState extends State<ViewPlannedIncome> {
   @override
   void initState() {
     super.initState();
-    _initializeSymptoms();
+    initializePlannedIncomes();
   }
 
-  Future<void> _initializeSymptoms() async {
+  Future<void> initializePlannedIncomes() async {
     listPlannedIncomes = await getPlannedIncomesFromDatabase();
     listPlannedIncomes
         .sort((a, b) => a.datePlannedIncomes.compareTo(b.datePlannedIncomes));

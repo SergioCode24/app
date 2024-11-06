@@ -2,10 +2,10 @@ import 'package:home_finance_management/pages/page_planned_income/model/list_pla
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:home_finance_management/pages/page_actual_income/model/list_actual_incomes.dart';
+import 'package:home_finance_management/pages/page_actual_expenses/model/list_actual_expenses.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper instance =
-      DatabaseHelper.internal();
+  static final DatabaseHelper instance = DatabaseHelper.internal();
 
   factory DatabaseHelper() => instance;
 
@@ -25,7 +25,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         await db.execute('''
         CREATE TABLE actual_incomes (
@@ -41,11 +41,18 @@ class DatabaseHelper {
           sum REAL
         )
       ''');
+        await db.execute('''
+        CREATE TABLE actual_expenses (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          date TEXT,
+          sum REAL
+        )
+      ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 2) {
+        if (oldVersion < 3) {
           await db.execute('''
-          CREATE TABLE planned_incomes (
+          CREATE TABLE actual_expenses (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             date TEXT,
             sum REAL
@@ -124,6 +131,39 @@ class DatabaseHelper {
     await db!.delete('planned_incomes');
   }
 
+  Future<int> insertActualExpenses(Map<String, dynamic> actualExpenses) async {
+    final db = await database;
+    return await db!.insert('actual_expenses', actualExpenses);
+  }
+
+  Future<List<Map<String, dynamic>>> getActualExpenses() async {
+    final db = await database;
+    return await db!.query('actual_expenses');
+  }
+
+  Future<void> updateActualExpenses(Map<String, dynamic> actualExpenses) async {
+    final db = await database;
+    await db!.update(
+      'actual_expenses',
+      actualExpenses,
+      where: 'id = ?',
+      whereArgs: [actualExpenses['id']],
+    );
+  }
+
+  Future<void> deleteActualExpenses(int id) async {
+    final db = await database;
+    await db!.delete(
+      'actual_expenses',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<void> clearActualExpenses() async {
+    final db = await database;
+    await db!.delete('actual_expenses');
+  }
 }
 
 Future<List<ActualIncomes>> getActualIncomesFromDatabase() async {
@@ -146,6 +186,18 @@ Future<List<PlannedIncomes>> getPlannedIncomesFromDatabase() async {
       idPlannedIncomes: plannedIncomesFromDB['id'],
       datePlannedIncomes: DateTime.parse(plannedIncomesFromDB['date']),
       sumPlannedIncomes: plannedIncomesFromDB['sum'],
+    );
+  }).toList();
+}
+
+Future<List<ActualExpenses>> getActualExpensesFromDatabase() async {
+  final dbHelper = DatabaseHelper();
+  final actualExpensesListFromDB = await dbHelper.getActualExpenses();
+  return actualExpensesListFromDB.map((actualExpensesFromDB) {
+    return ActualExpenses(
+      idActualExpenses: actualExpensesFromDB['id'],
+      dateActualExpenses: DateTime.parse(actualExpensesFromDB['date']),
+      sumActualExpenses: actualExpensesFromDB['sum'],
     );
   }).toList();
 }

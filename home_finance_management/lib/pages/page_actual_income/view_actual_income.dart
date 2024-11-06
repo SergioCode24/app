@@ -31,10 +31,10 @@ class _ViewActualIncomeState extends State<ViewActualIncome> {
   @override
   void initState() {
     super.initState();
-    initializeSymptoms();
+    initializeActualIncomes();
   }
 
-  Future<void> initializeSymptoms() async {
+  Future<void> initializeActualIncomes() async {
     listActualIncomes = await getActualIncomesFromDatabase();
     listActualIncomes
         .sort((a, b) => a.dateActualIncomes.compareTo(b.dateActualIncomes));

@@ -151,8 +151,8 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
               final dbHelper = DatabaseHelper();
               await dbHelper.deleteActualIncome(
                   filteredActualIncomesList[widget.index].idActualIncomes);
-              listActualIncomes.removeWhere((plannedIncome) =>
-                  plannedIncome.idActualIncomes ==
+              listActualIncomes.removeWhere((actualIncome) =>
+                  actualIncome.idActualIncomes ==
                   filteredActualIncomesList[widget.index].idActualIncomes);
               filterActualIncomes(widget.updateActualIncomes);
             },
