@@ -9,6 +9,8 @@ import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/components/filter_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/controller/list_tile_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/controller/text_field_enter_for_actual_expenses.dart';
+import 'package:home_finance_management/pages/page_actual_expenses/model/categories_actual_expenses.dart';
+import 'package:home_finance_management/pages/page_actual_expenses/model/selected_category_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/text_controller_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/filtered_actual_expenses_list.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/list_actual_expenses.dart';
@@ -24,6 +26,7 @@ class ViewActualExpenses extends StatefulWidget {
 class _ViewActualExpensesState extends State<ViewActualExpenses> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isLoadingActualExpenses = true;
+  final TextEditingController textControllerCategoriesActualExpenses = TextEditingController();
 
   void updateState() {
     setState(() {});
@@ -86,7 +89,53 @@ class _ViewActualExpensesState extends State<ViewActualExpenses> {
                       const DropdownButtonCurrencyForActualExpenses(),
                     ],
                   ),
-                  const DropdownButtonCategoryForActualExpenses(),
+                  Expanded(child:
+                  Row(
+                    children: [
+                      Expanded(child:
+                      const DropdownButtonCategoryForActualExpenses(),),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Добавить новую категорию'),
+                                content: TextField(
+                                  controller: textControllerCategoriesActualExpenses,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Введите название категории',
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Отмена'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      if (textControllerCategoriesActualExpenses.text.isNotEmpty) {
+                                        setState(() {
+                                          categoriesActualExpenses.add(CategoryActualExpenses(
+                                              nameActualExpenses: textControllerCategoriesActualExpenses.text));
+                                          selectedCategoryActualExpenses = textControllerCategoriesActualExpenses.text;
+                                        });
+                                      }
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Добавить'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),),
                   Row(children: [
                     const Expanded(
                       child: ElevatedButtonSelectDateActualExpenses(),

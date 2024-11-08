@@ -25,39 +25,36 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: (db, version) async {
         await db.execute('''
-        CREATE TABLE actual_incomes (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          date TEXT,
-          sum REAL
-        )
-      ''');
+      CREATE TABLE actual_incomes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        sum REAL
+      )
+    ''');
         await db.execute('''
-        CREATE TABLE planned_incomes (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          date TEXT,
-          sum REAL
-        )
-      ''');
+      CREATE TABLE planned_incomes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        sum REAL
+      )
+    ''');
         await db.execute('''
-        CREATE TABLE actual_expenses (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          date TEXT,
-          sum REAL
-        )
-      ''');
+      CREATE TABLE actual_expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        sum REAL,
+        category TEXT
+      )
+    ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 3) {
+        if (oldVersion < 4) {
           await db.execute('''
-          CREATE TABLE actual_expenses (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date TEXT,
-            sum REAL
-          )
-        ''');
+        ALTER TABLE actual_expenses ADD COLUMN category TEXT
+      ''');
         }
       },
     );
@@ -198,6 +195,7 @@ Future<List<ActualExpenses>> getActualExpensesFromDatabase() async {
       idActualExpenses: actualExpensesFromDB['id'],
       dateActualExpenses: DateTime.parse(actualExpensesFromDB['date']),
       sumActualExpenses: actualExpensesFromDB['sum'],
+      categoryActualExpenses: actualExpensesFromDB['category'], // Добавляем категорию
     );
   }).toList();
 }

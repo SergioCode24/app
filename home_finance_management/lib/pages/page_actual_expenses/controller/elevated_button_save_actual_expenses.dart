@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:home_finance_management/pages/page_actual_expenses/model/selected_category_actual_expenses.dart';
 import 'package:http/http.dart' as http;
 import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/components/filter_actual_expenses.dart';
@@ -68,17 +69,19 @@ class _ElevatedButtonSaveActualExpensesState
         final id = await dbHelper.insertActualExpenses({
           'date': actualExpensesSelectedDate.toIso8601String(),
           'sum': convertedSum,
+          'category': selectedCategoryActualExpenses, // Добавляем категорию
         });
 
         final actualExpenses = ActualExpenses(
             idActualExpenses: id,
             dateActualExpenses: actualExpensesSelectedDate,
-            sumActualExpenses: convertedSum);
+            sumActualExpenses: convertedSum,
+            categoryActualExpenses: selectedCategoryActualExpenses); // Добавляем категорию
         listActualExpenses.add(actualExpenses);
         textControllerActualExpenses.clear();
 
         listActualExpenses.sort(
-            (a, b) => a.dateActualExpenses.compareTo(b.dateActualExpenses));
+                (a, b) => a.dateActualExpenses.compareTo(b.dateActualExpenses));
 
         filterActualExpenses(() {});
 
