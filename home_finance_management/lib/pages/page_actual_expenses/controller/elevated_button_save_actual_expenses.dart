@@ -69,19 +69,19 @@ class _ElevatedButtonSaveActualExpensesState
         final id = await dbHelper.insertActualExpenses({
           'date': actualExpensesSelectedDate.toIso8601String(),
           'sum': convertedSum,
-          'category': selectedCategoryActualExpenses, // Добавляем категорию
+          'category': selectedCategoryActualExpenses,
         });
 
         final actualExpenses = ActualExpenses(
             idActualExpenses: id,
             dateActualExpenses: actualExpensesSelectedDate,
             sumActualExpenses: convertedSum,
-            categoryActualExpenses: selectedCategoryActualExpenses); // Добавляем категорию
+            categoryActualExpenses: selectedCategoryActualExpenses);
         listActualExpenses.add(actualExpenses);
         textControllerActualExpenses.clear();
 
         listActualExpenses.sort(
-                (a, b) => a.dateActualExpenses.compareTo(b.dateActualExpenses));
+            (a, b) => a.dateActualExpenses.compareTo(b.dateActualExpenses));
 
         filterActualExpenses(() {});
 

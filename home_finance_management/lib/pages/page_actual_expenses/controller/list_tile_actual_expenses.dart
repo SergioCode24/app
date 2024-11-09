@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:home_finance_management/pages/page_actual_expenses/components/dropdown_button_category_for_actual_expenses_in_dialog.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/components/show_error_dialog_for_actual_expenses.dart';
-import 'package:home_finance_management/pages/page_actual_expenses/model/categories_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/selected_category_actual_expenses.dart';
 import 'package:intl/intl.dart';
 import 'package:home_finance_management/component/database_helper.dart';
@@ -28,11 +28,14 @@ class _ListTileActualExpensesState extends State<ListTileActualExpenses> {
   DateTime? selectedDate;
   TextEditingController? sumControllerActualExpenses;
 
+  void updateStateListTileActualExpenses() {
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
     sumControllerActualExpenses = TextEditingController();
-    selectedCategoryActualExpenses = filteredActualExpensesList[widget.index].categoryActualExpenses;
   }
 
   @override
@@ -43,9 +46,10 @@ class _ListTileActualExpensesState extends State<ListTileActualExpenses> {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(DateFormat('d.M.y')
-              .format(filteredActualExpensesList[widget.index].dateActualExpenses)),
-          Text('Категория: ${filteredActualExpensesList[widget.index].categoryActualExpenses}'),
+          Text(
+              'Категория: ${filteredActualExpensesList[widget.index].categoryActualExpenses}'),
+          Text(DateFormat('d.M.y').format(
+              filteredActualExpensesList[widget.index].dateActualExpenses)),
         ],
       ),
       trailing: Row(
@@ -60,6 +64,8 @@ class _ListTileActualExpensesState extends State<ListTileActualExpenses> {
                       .toString();
               selectedDate =
                   filteredActualExpensesList[widget.index].dateActualExpenses;
+              selectedCategoryActualExpenses =
+                  filteredActualExpensesList[widget.index].categoryActualExpenses;
               showDialog(
                 context: context,
                 builder: (context) {
@@ -73,6 +79,8 @@ class _ListTileActualExpensesState extends State<ListTileActualExpenses> {
                             sumControllerActualExpenses,
                             labelText: 'Введите расход',
                             keyboardType: TextInputType.number),
+                        DropdownButtonCategoryForActualExpensesInDialog(
+                            updateState: updateStateListTileActualExpenses),
                         ElevatedButton(
                           onPressed: () async {
                             final DateTime? picked = await showDatePicker(
@@ -88,21 +96,6 @@ class _ListTileActualExpensesState extends State<ListTileActualExpenses> {
                             }
                           },
                           child: const Text('Выбрать дату'),
-                        ),
-                        DropdownButton<String>(
-                          value: selectedCategoryActualExpenses,
-                          hint: const Text('Выберите категорию'),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedCategoryActualExpenses = newValue!;
-                            });
-                          },
-                          items: categoriesActualExpenses.map<DropdownMenuItem<String>>((CategoryActualExpenses value) {
-                            return DropdownMenuItem<String>(
-                              value: value.nameActualExpenses,
-                              child: Text(value.nameActualExpenses),
-                            );
-                          }).toList(),
                         ),
                       ],
                     ),
@@ -126,7 +119,7 @@ class _ListTileActualExpensesState extends State<ListTileActualExpenses> {
 
                           if (sumControllerActualExpenses!.text.isNotEmpty &&
                               selectedDate != null &&
-                              selectedCategoryActualExpenses != 'Не выбрана') {
+                              selectedCategoryActualExpenses != 'Другое') {
                             {
                               final actualExpensesIndex = listActualExpenses
                                   .indexWhere((actualExpense) =>
@@ -142,7 +135,8 @@ class _ListTileActualExpensesState extends State<ListTileActualExpenses> {
                                             .idActualExpenses,
                                         dateActualExpenses: selectedDate!,
                                         sumActualExpenses: sum,
-                                        categoryActualExpenses: selectedCategoryActualExpenses); // Добавляем категорию
+                                        categoryActualExpenses:
+                                        selectedCategoryActualExpenses);
 
                                 listActualExpenses.sort((a, b) => a
                                     .dateActualExpenses
@@ -157,7 +151,7 @@ class _ListTileActualExpensesState extends State<ListTileActualExpenses> {
                                       .idActualExpenses,
                                   'date': selectedDate!.toIso8601String(),
                                   'sum': sum,
-                                  'category': selectedCategoryActualExpenses, // Добавляем категорию
+                                  'category': selectedCategoryActualExpenses,
                                 });
                               }
                             }
@@ -189,12 +183,3 @@ class _ListTileActualExpensesState extends State<ListTileActualExpenses> {
     );
   }
 }
-
-// categories_model.dart -
-// dropdown_button_category_for_actual_expenses.dart -
-// view_actual_expenses.dart
-// database_helper.dart -
-// list_actual_expenses.dart -
-// elevated_button_save_actual_expenses.dart -
-// list_tile_actual_expenses.dart -
-// selected_category_actual_expenses.dart -
