@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:home_finance_management/controller/icon_button_menu.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/controller/dropdown_button_currency_for_actual_expenses.dart';
-import 'package:home_finance_management/pages/page_actual_expenses/controller/icon_button_add_new_category_actual_expenses.dart';
-import 'package:home_finance_management/pages/page_actual_expenses/controller/icon_button_reset_categories_actual_expenses.dart';
+import 'package:home_finance_management/controller/icon_button_add_new_category.dart';
+import 'package:home_finance_management/controller/icon_button_reset_categories.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/controller/wrap_filter_buttons_for_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/controller/elevated_button_save_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/controller/elevated_button_select_date_actual_expenses.dart';
@@ -11,11 +11,11 @@ import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/components/filter_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/controller/list_tile_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/controller/text_field_enter_for_actual_expenses.dart';
-import 'package:home_finance_management/pages/page_actual_expenses/model/categories_actual_expenses.dart';
+import 'package:home_finance_management/model/categories.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/text_controller_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/filtered_actual_expenses_list.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/list_actual_expenses.dart';
-import 'package:home_finance_management/pages/page_actual_expenses/controller/dropdown_button_category_for_actual_expenses.dart';
+import 'package:home_finance_management/controller/dropdown_button_category.dart';
 
 class ViewActualExpenses extends StatefulWidget {
   const ViewActualExpenses({super.key});
@@ -42,7 +42,7 @@ class _ViewActualExpensesState extends State<ViewActualExpenses> {
     listActualExpenses = await getActualExpensesFromDatabase();
     listActualExpenses
         .sort((a, b) => a.dateActualExpenses.compareTo(b.dateActualExpenses));
-    categoriesActualExpenses = await getCategoriesActualExpensesFromDatabase();
+    categories = await getCategoriesFromDatabase();
     filterActualExpenses(updateState);
     setState(() {
       isLoadingActualExpenses = false;
@@ -92,11 +92,11 @@ class _ViewActualExpensesState extends State<ViewActualExpenses> {
                   ),
                   Row(
                     children: [
-                      DropdownButtonCategoryForActualExpenses(
+                      DropdownButtonCategory(
                           updateState: updateState),
-                      IconButtonAddNewCategoryActualExpenses(
+                      IconButtonAddNewCategory(
                           updateState: updateState),
-                      IconButtonResetCategoriesActualExpenses(
+                      IconButtonResetCategories(
                           updateState: updateState),
                     ],
                   ),

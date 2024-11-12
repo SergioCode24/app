@@ -25,7 +25,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 6,
+      version: 7,
       onCreate: (db, version) async {
         await db.execute('''
       CREATE TABLE actual_incomes (
@@ -50,16 +50,16 @@ class DatabaseHelper {
       )
     ''');
         await db.execute('''
-      CREATE TABLE categories_actual_expenses (
+      CREATE TABLE categories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT
       )
     ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 6) {
+        if (oldVersion < 7) {
           await db.execute('''
-      CREATE TABLE categories_actual_expenses (
+      CREATE TABLE categories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT
       )
@@ -171,19 +171,19 @@ class DatabaseHelper {
     await db!.delete('actual_expenses');
   }
 
-  Future<int> insertCategoriesActualExpenses(
-      Map<String, dynamic> categoriesActualExpenses) async {
+  Future<int> insertCategories(
+      Map<String, dynamic> categories) async {
     final db = await database;
     return await db!
-        .insert('categories_actual_expenses', categoriesActualExpenses);
+        .insert('categories', categories);
   }
 
-  Future<List<Map<String, dynamic>>> getCategoriesActualExpenses() async {
+  Future<List<Map<String, dynamic>>> getCategories() async {
     final db = await database;
-    return await db!.query('categories_actual_expenses');
+    return await db!.query('categories');
   }
 
-  Future<void> clearCategoriesActualExpenses() async {
+  Future<void> clearCategories() async {
     final db = await database;
     final defaultCategories = [
       'Автомобиль',
@@ -200,38 +200,38 @@ class DatabaseHelper {
       'Другое'
     ];
 
-    final currentCategories = await getCategoriesActualExpenses();
+    final currentCategories = await getCategories();
     final categoriesToSave = currentCategories
         .where((category) => !defaultCategories.contains(category['name']))
         .map((category) => category['name'])
         .toList();
 
     for (var category in categoriesToSave) {
-      await insertCategoriesActualExpenses({'name': category});
+      await insertCategories({'name': category});
     }
 
     for (var category in categoriesToSave) {
-      await updateActualExpensesCategory(category, 'Другое');
+      await updateCategory(category, 'Другое');
     }
 
-    await db!.delete('categories_actual_expenses');
+    await db!.delete('categories');
     for (var category in defaultCategories) {
-      await insertCategoriesActualExpenses({'name': category});
+      await insertCategories({'name': category});
     }
   }
 
-  Future<bool> categoryActualExpensesExists(
-      String categoryActualExpensesName) async {
+  Future<bool> categoryExists(
+      String categoryName) async {
     final db = await database;
     final result = await db!.query(
-      'categories_actual_expenses',
+      'categories',
       where: 'name = ?',
-      whereArgs: [categoryActualExpensesName],
+      whereArgs: [categoryName],
     );
     return result.isNotEmpty;
   }
 
-  Future<void> updateActualExpensesCategory(String oldCategory, String newCategory) async {
+  Future<void> updateCategory(String oldCategory, String newCategory) async {
     final db = await database;
     await db!.update(
       'actual_expenses',
@@ -279,11 +279,11 @@ Future<List<ActualExpenses>> getActualExpensesFromDatabase() async {
   }).toList();
 }
 
-Future<List<String>> getCategoriesActualExpensesFromDatabase() async {
+Future<List<String>> getCategoriesFromDatabase() async {
   final dbHelper = DatabaseHelper();
-  final categoriesActualExpensesListFromDB =
-      await dbHelper.getCategoriesActualExpenses();
-  return categoriesActualExpensesListFromDB.map((categoryActualExpensesFromDB) {
-    return categoryActualExpensesFromDB['name'].toString();
+  final categoriesListFromDB =
+      await dbHelper.getCategories();
+  return categoriesListFromDB.map((categoryFromDB) {
+    return categoryFromDB['name'].toString();
   }).toList();
 }
