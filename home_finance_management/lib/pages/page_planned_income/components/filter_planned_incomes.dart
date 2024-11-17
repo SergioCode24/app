@@ -13,6 +13,5 @@ void filterPlannedIncomes(Function updateState) {
             plannedIncome.datePlannedIncomes.isAtSameMomentAs(
                 filterDatesPlannedIncomes[0].endDatePlannedIncomes));
   }).toList();
-
   updateState();
 }

@@ -13,6 +13,5 @@ void filterActualExpenses(Function updateState) {
             actualExpenses.dateActualExpenses.isAtSameMomentAs(
                 filterDatesActualExpenses[0].endDateActualExpenses));
   }).toList();
-
   updateState();
 }

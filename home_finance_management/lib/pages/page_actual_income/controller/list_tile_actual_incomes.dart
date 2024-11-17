@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:home_finance_management/pages/page_actual_income/components/show_error_dialog_for_actual_incomes.dart';
+import 'package:home_finance_management/component/conver_currency.dart';
+import 'package:home_finance_management/component/show_error_dialog.dart';
+import 'package:home_finance_management/component/text_button_cancel.dart';
+import 'package:home_finance_management/controller/dropdown_button_currency.dart';
+import 'package:home_finance_management/model/selected_currency.dart';
 import 'package:intl/intl.dart';
 import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/pages/page_actual_income/model/filtered_actual_incomes_list.dart';
 import 'package:home_finance_management/pages/page_actual_income/model/list_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/components/filter_actual_incomes.dart';
-import 'package:home_finance_management/pages/page_actual_income/components/text_button_cancel_alert_dialog_for_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/controller/text_field_enter_for_actual_incomes.dart';
 
 class ListTileActualIncomes extends StatefulWidget {
@@ -45,6 +48,8 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
+              String tempSelectedCurrency = selectedCurrency;
+              selectedCurrency = 'RUB';
               sumControllerActualIncomes?.text =
                   filteredActualIncomesList[widget.index]
                       .sumActualIncomes
@@ -59,11 +64,18 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        TextFieldEnterForActualIncomes(
-                            textControllerActualIncomes:
-                                sumControllerActualIncomes,
-                            labelText: 'Введите доход',
-                            keyboardType: TextInputType.number),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFieldEnterForActualIncomes(
+                                  textControllerActualIncomes:
+                                      sumControllerActualIncomes,
+                                  labelText: 'Введите доход',
+                                  keyboardType: TextInputType.number),
+                            ),
+                            const DropdownButtonCurrency()
+                          ],
+                        ),
                         ElevatedButton(
                           onPressed: () async {
                             final DateTime? picked = await showDatePicker(
@@ -83,9 +95,8 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
                       ],
                     ),
                     actions: [
-                      const TextButtonCancelAlertDialogForActualIncomes(
-                        text: 'Отмена',
-                      ),
+                      TextButtonCancel(
+                          tempSelectedCurrency: tempSelectedCurrency),
                       TextButton(
                         onPressed: () async {
                           double sum;
@@ -93,13 +104,20 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
                             sum =
                                 double.parse(sumControllerActualIncomes!.text);
                           } catch (e) {
-                            showErrorDialogForActualIncomes(
-                                context,
-                                'Ошибка ввода',
+                            showErrorDialog(context, 'Ошибка ввода',
                                 'Пожалуйста, введите корректное числовое значение.');
                             return;
                           }
-
+                          double convertedSum;
+                          if (selectedCurrency != 'RUB') {
+                            convertedSum = await convertCurrency(
+                              selectedCurrency,
+                              'RUB',
+                              sum,
+                            );
+                          } else {
+                            convertedSum = sum;
+                          }
                           if (sumControllerActualIncomes!.text.isNotEmpty &&
                               selectedDate != null) {
                             {
@@ -109,33 +127,28 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
                                       filteredActualIncomesList[widget.index]
                                           .idActualIncomes);
                               if (actualIncomeIndex != -1) {
-                                listActualIncomes[actualIncomeIndex] =
-                                    ActualIncomes(
-                                        idActualIncomes:
-                                            filteredActualIncomesList[
-                                                    widget.index]
-                                                .idActualIncomes,
-                                        dateActualIncomes: selectedDate!,
-                                        sumActualIncomes: sum);
-
-                                listActualIncomes.sort((a, b) => a
-                                    .dateActualIncomes
-                                    .compareTo(b.dateActualIncomes));
-
-                                filterActualIncomes(widget.updateActualIncomes);
-
-                                final dbHelper =
-                                    DatabaseHelper();
+                                final dbHelper = DatabaseHelper();
                                 await dbHelper.updateActualIncome({
                                   'id': filteredActualIncomesList[widget.index]
                                       .idActualIncomes,
                                   'date': selectedDate!.toIso8601String(),
-                                  'sum': sum,
+                                  'sum': double.parse(
+                                      convertedSum.toStringAsFixed(2)),
                                 });
+                                listActualIncomes =
+                                    await getActualIncomesFromDatabase();
+                                listActualIncomes.sort((a, b) => a
+                                    .dateActualIncomes
+                                    .compareTo(b.dateActualIncomes));
+                                filterActualIncomes(widget.updateActualIncomes);
                               }
                             }
                           }
-                          Navigator.of(context).pop();
+                          final currentContext = context;
+                          if (mounted && currentContext.mounted) {
+                            Navigator.of(currentContext).pop();
+                          }
+                          selectedCurrency = tempSelectedCurrency;
                         },
                         child: const Text('Сохранить'),
                       ),
@@ -151,9 +164,7 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
               final dbHelper = DatabaseHelper();
               await dbHelper.deleteActualIncome(
                   filteredActualIncomesList[widget.index].idActualIncomes);
-              listActualIncomes.removeWhere((actualIncome) =>
-                  actualIncome.idActualIncomes ==
-                  filteredActualIncomesList[widget.index].idActualIncomes);
+              listActualIncomes = await getActualIncomesFromDatabase();
               filterActualIncomes(widget.updateActualIncomes);
             },
           )

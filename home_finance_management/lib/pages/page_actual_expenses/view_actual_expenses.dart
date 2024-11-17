@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home_finance_management/controller/icon_button_menu.dart';
-import 'package:home_finance_management/pages/page_actual_expenses/controller/dropdown_button_currency_for_actual_expenses.dart';
+import 'package:home_finance_management/controller/dropdown_button_currency.dart';
 import 'package:home_finance_management/controller/icon_button_add_new_category.dart';
 import 'package:home_finance_management/controller/icon_button_reset_categories.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/controller/wrap_filter_buttons_for_actual_expenses.dart';
@@ -43,6 +43,9 @@ class _ViewActualExpensesState extends State<ViewActualExpenses> {
     listActualExpenses
         .sort((a, b) => a.dateActualExpenses.compareTo(b.dateActualExpenses));
     categories = await getCategoriesFromDatabase();
+    if (categories.isEmpty) {
+      DatabaseHelper().insertDefaultCategories();
+    }
     filterActualExpenses(updateState);
     setState(() {
       isLoadingActualExpenses = false;
@@ -70,8 +73,7 @@ class _ViewActualExpensesState extends State<ViewActualExpenses> {
           actualIncomePage: true,
           actualExpensesPage: false,
           plannedIncomePage: true,
-          plannedExpensesPage: true,
-          statisticsPage: true),
+          plannedExpensesPage: true),
       body: isLoadingActualExpenses
           ? const Center(child: CircularProgressIndicator())
           : Padding(
@@ -87,17 +89,14 @@ class _ViewActualExpensesState extends State<ViewActualExpenses> {
                                 textControllerActualExpenses,
                             keyboardType: TextInputType.number),
                       ),
-                      const DropdownButtonCurrencyForActualExpenses(),
+                      const DropdownButtonCurrency(),
                     ],
                   ),
                   Row(
                     children: [
-                      DropdownButtonCategory(
-                          updateState: updateState),
-                      IconButtonAddNewCategory(
-                          updateState: updateState),
-                      IconButtonResetCategories(
-                          updateState: updateState),
+                      DropdownButtonCategory(updateState: updateState),
+                      IconButtonAddNewCategory(updateState: updateState),
+                      IconButtonResetCategories(updateState: updateState),
                     ],
                   ),
                   Row(children: [

@@ -1,47 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:home_finance_management/component/conver_currency.dart';
-import 'package:home_finance_management/component/database_helper.dart';
+import 'package:home_finance_management/component/dropdown_button_category_in_dialog.dart';
 import 'package:home_finance_management/component/show_error_dialog.dart';
 import 'package:home_finance_management/component/text_button_cancel.dart';
 import 'package:home_finance_management/controller/dropdown_button_currency.dart';
 import 'package:home_finance_management/model/selected_currency.dart';
+import 'package:home_finance_management/model/selected_category.dart';
 import 'package:intl/intl.dart';
-import 'package:home_finance_management/pages/page_planned_income/model/filtered_planned_incomes_list.dart';
-import 'package:home_finance_management/pages/page_planned_income/model/list_planned_incomes.dart';
-import 'package:home_finance_management/pages/page_planned_income/components/filter_planned_incomes.dart';
-import 'package:home_finance_management/pages/page_planned_income/controller/text_field_enter_for_planned_incomes.dart';
+import 'package:home_finance_management/component/database_helper.dart';
+import 'package:home_finance_management/pages/page_planned_expenses/model/filtered_planned_expenses_list.dart';
+import 'package:home_finance_management/pages/page_planned_expenses/model/list_planned_expenses.dart';
+import 'package:home_finance_management/pages/page_planned_expenses/components/filter_planned_expenses.dart';
+import 'package:home_finance_management/pages/page_planned_expenses/controller/text_field_enter_for_planned_expenses.dart';
 
-class ListTilePlannedIncomes extends StatefulWidget {
+class ListTilePlannedExpenses extends StatefulWidget {
   final int index;
-  final VoidCallback updatePlannedIncomes;
+  final VoidCallback updatePlannedExpenses;
 
-  const ListTilePlannedIncomes({
+  const ListTilePlannedExpenses({
     super.key,
     required this.index,
-    required this.updatePlannedIncomes,
+    required this.updatePlannedExpenses,
   });
 
   @override
-  State<ListTilePlannedIncomes> createState() => _ListTilePlannedIncomesState();
+  State<ListTilePlannedExpenses> createState() =>
+      _ListTilePlannedExpensesState();
 }
 
-class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
+class _ListTilePlannedExpensesState extends State<ListTilePlannedExpenses> {
   DateTime? selectedDate;
-  TextEditingController? sumControllerPlannedIncomes;
+  TextEditingController? sumControllerPlannedExpenses;
+
+  void updateStateListTilePlannedExpenses() {
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
-    sumControllerPlannedIncomes = TextEditingController();
+    sumControllerPlannedExpenses = TextEditingController();
   }
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-          '${filteredPlannedIncomesList[widget.index].sumPlannedIncomes} рублей'),
-      subtitle: Text(DateFormat('d.M.y')
-          .format(filteredPlannedIncomesList[widget.index].datePlannedIncomes)),
+          '${filteredPlannedExpensesList[widget.index].sumPlannedExpenses} рублей'),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+              'Категория: ${filteredPlannedExpensesList[widget.index].categoryPlannedExpenses}'),
+          Text(DateFormat('d.M.y').format(
+              filteredPlannedExpensesList[widget.index].datePlannedExpenses)),
+        ],
+      ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -50,39 +64,43 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
             onPressed: () {
               String tempSelectedCurrency = selectedCurrency;
               selectedCurrency = 'RUB';
-              sumControllerPlannedIncomes?.text =
-                  filteredPlannedIncomesList[widget.index]
-                      .sumPlannedIncomes
+              sumControllerPlannedExpenses?.text =
+                  filteredPlannedExpensesList[widget.index]
+                      .sumPlannedExpenses
                       .toString();
               selectedDate =
-                  filteredPlannedIncomesList[widget.index].datePlannedIncomes;
+                  filteredPlannedExpensesList[widget.index].datePlannedExpenses;
+              selectedCategory = filteredPlannedExpensesList[widget.index]
+                  .categoryPlannedExpenses;
               showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Редактировать доход'),
+                    title: const Text('Редактировать расход'),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Row(
                           children: [
                             Expanded(
-                              child: TextFieldEnterForPlannedIncomes(
-                                  textControllerPlannedIncomes:
-                                      sumControllerPlannedIncomes,
-                                  labelText: 'Введите доход',
+                              child: TextFieldEnterForPlannedExpenses(
+                                  textControllerPlannedExpenses:
+                                      sumControllerPlannedExpenses,
+                                  labelText: 'Введите расход',
                                   keyboardType: TextInputType.number),
                             ),
                             const DropdownButtonCurrency()
                           ],
                         ),
+                        DropdownButtonCategoryInDialog(
+                            updateState: updateStateListTilePlannedExpenses),
                         ElevatedButton(
                           onPressed: () async {
                             final DateTime? picked = await showDatePicker(
                               context: context,
                               initialDate:
-                                  filteredPlannedIncomesList[widget.index]
-                                      .datePlannedIncomes,
+                                  filteredPlannedExpensesList[widget.index]
+                                      .datePlannedExpenses,
                               firstDate: DateTime.now(),
                               lastDate: DateTime(2124),
                             );
@@ -91,7 +109,7 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
                             }
                           },
                           child: const Text('Выбрать дату'),
-                        )
+                        ),
                       ],
                     ),
                     actions: [
@@ -101,8 +119,8 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
                         onPressed: () async {
                           double sum;
                           try {
-                            sum =
-                                double.parse(sumControllerPlannedIncomes!.text);
+                            sum = double.parse(
+                                sumControllerPlannedExpenses!.text);
                           } catch (e) {
                             showErrorDialog(context, 'Ошибка ввода',
                                 'Пожалуйста, введите корректное числовое значение.');
@@ -118,30 +136,32 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
                           } else {
                             convertedSum = sum;
                           }
-                          if (sumControllerPlannedIncomes!.text.isNotEmpty &&
+                          if (sumControllerPlannedExpenses!.text.isNotEmpty &&
                               selectedDate != null) {
                             {
-                              final plannedIncomeIndex = listPlannedIncomes
-                                  .indexWhere((plannedIncome) =>
-                                      plannedIncome.idPlannedIncomes ==
-                                      filteredPlannedIncomesList[widget.index]
-                                          .idPlannedIncomes);
-                              if (plannedIncomeIndex != -1) {
+                              final plannedExpensesIndex = listPlannedExpenses
+                                  .indexWhere((plannedExpenses) =>
+                                      plannedExpenses.idPlannedExpenses ==
+                                      filteredPlannedExpensesList[widget.index]
+                                          .idPlannedExpenses);
+                              if (plannedExpensesIndex != -1) {
                                 final dbHelper = DatabaseHelper();
-                                await dbHelper.updatePlannedIncome({
-                                  'id': filteredPlannedIncomesList[widget.index]
-                                      .idPlannedIncomes,
+                                await dbHelper.updatePlannedExpenses({
+                                  'id':
+                                      filteredPlannedExpensesList[widget.index]
+                                          .idPlannedExpenses,
                                   'date': selectedDate!.toIso8601String(),
                                   'sum': double.parse(
                                       convertedSum.toStringAsFixed(2)),
+                                  'category': selectedCategory,
                                 });
-                                listPlannedIncomes =
-                                    await getPlannedIncomesFromDatabase();
-                                listPlannedIncomes.sort((a, b) => a
-                                    .datePlannedIncomes
-                                    .compareTo(b.datePlannedIncomes));
-                                filterPlannedIncomes(
-                                    widget.updatePlannedIncomes);
+                                listPlannedExpenses =
+                                    await getPlannedExpensesFromDatabase();
+                                listPlannedExpenses.sort((a, b) => a
+                                    .datePlannedExpenses
+                                    .compareTo(b.datePlannedExpenses));
+                                filterPlannedExpenses(
+                                    widget.updatePlannedExpenses);
                               }
                             }
                           }
@@ -163,10 +183,10 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
             icon: const Icon(Icons.delete),
             onPressed: () async {
               final dbHelper = DatabaseHelper();
-              await dbHelper.deletePlannedIncome(
-                  filteredPlannedIncomesList[widget.index].idPlannedIncomes);
-              listPlannedIncomes = await getPlannedIncomesFromDatabase();
-              filterPlannedIncomes(widget.updatePlannedIncomes);
+              await dbHelper.deletePlannedExpenses(
+                  filteredPlannedExpensesList[widget.index].idPlannedExpenses);
+              listPlannedExpenses = await getPlannedExpensesFromDatabase();
+              filterPlannedExpenses(widget.updatePlannedExpenses);
             },
           )
         ],

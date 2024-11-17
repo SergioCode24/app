@@ -1,14 +1,13 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:home_finance_management/component/conver_currency.dart';
 import 'package:home_finance_management/model/selected_category.dart';
-import 'package:http/http.dart' as http;
 import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/components/filter_actual_expenses.dart';
-import 'package:home_finance_management/pages/page_actual_expenses/components/show_error_dialog_for_actual_expenses.dart';
+import 'package:home_finance_management/component/show_error_dialog.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/text_controller_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/list_actual_expenses.dart';
 import 'package:home_finance_management/pages/page_actual_expenses/model/actual_expense_selected_date.dart';
-import 'package:home_finance_management/pages/page_actual_expenses/model/selected_currency_actual_expenses.dart';
+import 'package:home_finance_management/model/selected_currency.dart';
 
 class ElevatedButtonSaveActualExpenses extends StatefulWidget {
   final VoidCallback updateActualExpenses;
@@ -23,21 +22,6 @@ class ElevatedButtonSaveActualExpenses extends StatefulWidget {
 
 class _ElevatedButtonSaveActualExpensesState
     extends State<ElevatedButtonSaveActualExpenses> {
-  final String apiKey = 'd3d37cccac2e9edeb3161e0f';
-  final String apiUrl = 'https://api.exchangerate-api.com/v4/latest/';
-
-  Future<double> convertCurrency(String from, String to, double amount) async {
-    final response = await http.get(Uri.parse('$apiUrl$from'));
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final rate = data['rates'][to];
-      return amount * rate;
-    } else {
-      throw Exception('Failed to load currency data');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -49,42 +33,31 @@ class _ElevatedButtonSaveActualExpensesState
         try {
           sum = double.parse(textControllerActualExpenses.text);
         } catch (e) {
-          showErrorDialogForActualExpenses(context, 'Ошибка ввода',
+          showErrorDialog(context, 'Ошибка ввода',
               'Пожалуйста, введите корректное числовое значение.');
           return;
         }
-
         double convertedSum;
-        if (selectedCurrencyActualExpenses != 'RUB') {
+        if (selectedCurrency != 'RUB') {
           convertedSum = await convertCurrency(
-            selectedCurrencyActualExpenses,
+            selectedCurrency,
             'RUB',
             sum,
           );
         } else {
           convertedSum = sum;
         }
-
         final dbHelper = DatabaseHelper();
-        final id = await dbHelper.insertActualExpenses({
+        await dbHelper.insertActualExpenses({
           'date': actualExpensesSelectedDate.toIso8601String(),
           'sum': convertedSum,
           'category': selectedCategory,
         });
-
-        final actualExpenses = ActualExpenses(
-            idActualExpenses: id,
-            dateActualExpenses: actualExpensesSelectedDate,
-            sumActualExpenses: convertedSum,
-            categoryActualExpenses: selectedCategory);
-        listActualExpenses.add(actualExpenses);
-        textControllerActualExpenses.clear();
-
+        listActualExpenses = await getActualExpensesFromDatabase();
         listActualExpenses.sort(
             (a, b) => a.dateActualExpenses.compareTo(b.dateActualExpenses));
-
+        textControllerActualExpenses.clear();
         filterActualExpenses(() {});
-
         widget.updateActualExpenses();
       },
       child: const Text('Сохранить'),

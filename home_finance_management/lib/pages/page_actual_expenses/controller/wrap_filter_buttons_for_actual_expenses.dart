@@ -75,7 +75,7 @@ class _WrapFilterButtonsForActualExpensesState
               filteredActualExpensesList = listActualExpenses;
               filterDatesActualExpenses = [
                 FilterForActualExpenses(
-                    startDateActualExpenses: DateTime(2000, 1, 1),
+                    startDateActualExpenses: DateTime(2000),
                     endDateActualExpenses: DateTime.now())
               ];
               filterActualExpenses(widget.updateActualExpenses);

@@ -5,16 +5,13 @@ import 'package:home_finance_management/model/selected_category.dart';
 class DropdownButtonCategory extends StatefulWidget {
   final VoidCallback updateState;
 
-  const DropdownButtonCategory(
-      {super.key, required this.updateState});
+  const DropdownButtonCategory({super.key, required this.updateState});
 
   @override
-  State<DropdownButtonCategory> createState() =>
-      _DropdownButtonCategoryState();
+  State<DropdownButtonCategory> createState() => _DropdownButtonCategoryState();
 }
 
-class _DropdownButtonCategoryState
-    extends State<DropdownButtonCategory> {
+class _DropdownButtonCategoryState extends State<DropdownButtonCategory> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
@@ -26,8 +23,7 @@ class _DropdownButtonCategoryState
         });
         widget.updateState();
       },
-      items: categories
-          .map<DropdownMenuItem<String>>((String value) {
+      items: categories.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),

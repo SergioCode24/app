@@ -9,6 +9,6 @@ class FilterForActualIncomes {
 
 List<FilterForActualIncomes> filterDatesActualIncomes = [
   FilterForActualIncomes(
-      startDateActualIncomes: DateTime(2000, 1, 1),
+      startDateActualIncomes: DateTime(2000),
       endDateActualIncomes: DateTime.now())
 ];

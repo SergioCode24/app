@@ -1,3 +1,4 @@
+import 'package:home_finance_management/pages/page_planned_expenses/model/list_planned_expenses.dart';
 import 'package:home_finance_management/pages/page_planned_income/model/list_planned_incomes.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -25,7 +26,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 7,
+      version: 10,
       onCreate: (db, version) async {
         await db.execute('''
       CREATE TABLE actual_incomes (
@@ -50,6 +51,14 @@ class DatabaseHelper {
       )
     ''');
         await db.execute('''
+      CREATE TABLE planned_expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        sum REAL,
+        category TEXT
+      )
+    ''');
+        await db.execute('''
       CREATE TABLE categories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT
@@ -57,16 +66,39 @@ class DatabaseHelper {
     ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 7) {
+        if (oldVersion < 10) {
           await db.execute('''
-      CREATE TABLE categories (
+      CREATE TABLE planned_expenses (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT
+        date TEXT,
+        sum REAL,
+        category TEXT
       )
     ''');
         }
       },
     );
+  }
+
+  Future<void> insertDefaultCategories() async {
+    final categories = [
+      'Автомобиль',
+      'Общественный транспорт',
+      'Дом',
+      'Здоровье',
+      'Личные расходы',
+      'Одежда',
+      'Питание',
+      'Подарки',
+      'Семейные расходы',
+      'Техника',
+      'Услуги',
+      'Другое'
+    ];
+
+    for (var category in categories) {
+      await insertCategories({'name': category});
+    }
   }
 
   Future<int> insertActualIncome(Map<String, dynamic> actualIncome) async {
@@ -171,11 +203,9 @@ class DatabaseHelper {
     await db!.delete('actual_expenses');
   }
 
-  Future<int> insertCategories(
-      Map<String, dynamic> categories) async {
+  Future<int> insertCategories(Map<String, dynamic> categories) async {
     final db = await database;
-    return await db!
-        .insert('categories', categories);
+    return await db!.insert('categories', categories);
   }
 
   Future<List<Map<String, dynamic>>> getCategories() async {
@@ -220,8 +250,43 @@ class DatabaseHelper {
     }
   }
 
-  Future<bool> categoryExists(
-      String categoryName) async {
+  Future<int> insertPlannedExpenses(
+      Map<String, dynamic> plannedExpenses) async {
+    final db = await database;
+    return await db!.insert('planned_expenses', plannedExpenses);
+  }
+
+  Future<List<Map<String, dynamic>>> getPlannedExpenses() async {
+    final db = await database;
+    return await db!.query('planned_expenses');
+  }
+
+  Future<void> updatePlannedExpenses(
+      Map<String, dynamic> plannedExpenses) async {
+    final db = await database;
+    await db!.update(
+      'planned_expenses',
+      plannedExpenses,
+      where: 'id = ?',
+      whereArgs: [plannedExpenses['id']],
+    );
+  }
+
+  Future<void> deletePlannedExpenses(int id) async {
+    final db = await database;
+    await db!.delete(
+      'planned_expenses',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<void> clearPlannedExpenses() async {
+    final db = await database;
+    await db!.delete('planned_expenses');
+  }
+
+  Future<bool> categoryExists(String categoryName) async {
     final db = await database;
     final result = await db!.query(
       'categories',
@@ -235,6 +300,12 @@ class DatabaseHelper {
     final db = await database;
     await db!.update(
       'actual_expenses',
+      {'category': newCategory},
+      where: 'category = ?',
+      whereArgs: [oldCategory],
+    );
+    await db.update(
+      'planned_expenses',
       {'category': newCategory},
       where: 'category = ?',
       whereArgs: [oldCategory],
@@ -281,9 +352,21 @@ Future<List<ActualExpenses>> getActualExpensesFromDatabase() async {
 
 Future<List<String>> getCategoriesFromDatabase() async {
   final dbHelper = DatabaseHelper();
-  final categoriesListFromDB =
-      await dbHelper.getCategories();
+  final categoriesListFromDB = await dbHelper.getCategories();
   return categoriesListFromDB.map((categoryFromDB) {
     return categoryFromDB['name'].toString();
+  }).toList();
+}
+
+Future<List<PlannedExpenses>> getPlannedExpensesFromDatabase() async {
+  final dbHelper = DatabaseHelper();
+  final plannedExpensesListFromDB = await dbHelper.getPlannedExpenses();
+  return plannedExpensesListFromDB.map((plannedExpensesFromDB) {
+    return PlannedExpenses(
+      idPlannedExpenses: plannedExpensesFromDB['id'],
+      datePlannedExpenses: DateTime.parse(plannedExpensesFromDB['date']),
+      sumPlannedExpenses: plannedExpensesFromDB['sum'],
+      categoryPlannedExpenses: plannedExpensesFromDB['category'],
+    );
   }).toList();
 }

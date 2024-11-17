@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/model/categories.dart';
-import 'package:home_finance_management/model/text_controller_categories.dart';
+import 'package:home_finance_management/model/selected_category.dart';
 
 class IconButtonAddNewCategory extends StatefulWidget {
   final VoidCallback updateState;
 
-  const IconButtonAddNewCategory(
-      {super.key, required this.updateState});
+  const IconButtonAddNewCategory({super.key, required this.updateState});
 
   @override
   State<IconButtonAddNewCategory> createState() =>
       _IconButtonAddNewCategoryState();
 }
 
-class _IconButtonAddNewCategoryState
-    extends State<IconButtonAddNewCategory> {
+class _IconButtonAddNewCategoryState extends State<IconButtonAddNewCategory> {
+  TextEditingController textControllerCategories = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -41,17 +41,18 @@ class _IconButtonAddNewCategoryState
                 ),
                 TextButton(
                   onPressed: () async {
-                    if (textControllerCategories
-                        .text.isNotEmpty) {
+                    if (textControllerCategories.text.isNotEmpty) {
+                      selectedCategory = textControllerCategories.text;
                       final dbHelper = DatabaseHelper();
-                      await dbHelper.insertCategories({
-                        'name': textControllerCategories.text
-                      });
-                      categories =
-                          await getCategoriesFromDatabase();
+                      await dbHelper.insertCategories(
+                          {'name': textControllerCategories.text});
+                      categories = await getCategoriesFromDatabase();
                       widget.updateState();
                     }
-                    Navigator.of(context).pop();
+                    final currentContext = context;
+                    if (mounted && currentContext.mounted) {
+                      Navigator.of(currentContext).pop();
+                    }
                   },
                   child: const Text('Добавить'),
                 ),

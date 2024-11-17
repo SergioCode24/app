@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:home_finance_management/controller/dropdown_button_currency.dart';
 import 'package:home_finance_management/controller/icon_button_menu.dart';
-import 'package:home_finance_management/pages/page_actual_income/controller/dropdown_button_currency_for_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/controller/wrap_filter_buttons_for_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/controller/elevated_button_save_actual_incomes.dart';
 import 'package:home_finance_management/pages/page_actual_income/controller/elevated_button_select_date_actual_incomes.dart';
@@ -65,8 +65,7 @@ class _ViewActualIncomeState extends State<ViewActualIncome> {
           actualIncomePage: false,
           actualExpensesPage: true,
           plannedIncomePage: true,
-          plannedExpensesPage: true,
-          statisticsPage: true),
+          plannedExpensesPage: true),
       body: isLoadingActualIncomes
           ? const Center(child: CircularProgressIndicator())
           : Padding(
@@ -82,7 +81,7 @@ class _ViewActualIncomeState extends State<ViewActualIncome> {
                                 textControllerActualIncomes,
                             keyboardType: TextInputType.number),
                       ),
-                      const DropdownButtonCurrencyForActualIncomes(),
+                      const DropdownButtonCurrency(),
                     ],
                   ),
                   Row(children: [

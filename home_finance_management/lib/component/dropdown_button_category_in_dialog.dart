@@ -5,8 +5,7 @@ import 'package:home_finance_management/model/selected_category.dart';
 class DropdownButtonCategoryInDialog extends StatefulWidget {
   final VoidCallback updateState;
 
-  const DropdownButtonCategoryInDialog(
-      {super.key, required this.updateState});
+  const DropdownButtonCategoryInDialog({super.key, required this.updateState});
 
   @override
   State<DropdownButtonCategoryInDialog> createState() =>
@@ -15,7 +14,6 @@ class DropdownButtonCategoryInDialog extends StatefulWidget {
 
 class _DropdownButtonCategoryInDialogState
     extends State<DropdownButtonCategoryInDialog> {
-
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
@@ -27,8 +25,7 @@ class _DropdownButtonCategoryInDialogState
           widget.updateState();
         });
       },
-      items: categories
-          .map<DropdownMenuItem<String>>((String value) {
+      items: categories.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),

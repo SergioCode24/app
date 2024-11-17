@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:home_finance_management/pages/page_planned_income/components/filter_planned_incomes.dart';
-import 'package:home_finance_management/pages/page_planned_income/model/filter_dates_planned_incomes.dart';
-import 'package:home_finance_management/pages/page_planned_income/model/filtered_planned_incomes_list.dart';
-import 'package:home_finance_management/pages/page_planned_income/model/list_planned_incomes.dart';
+import 'package:home_finance_management/pages/page_planned_expenses/components/filter_planned_expenses.dart';
+import 'package:home_finance_management/pages/page_planned_expenses/model/filter_dates_planned_expenses.dart';
+import 'package:home_finance_management/pages/page_planned_expenses/model/filtered_planned_expenses_list.dart';
+import 'package:home_finance_management/pages/page_planned_expenses/model/list_planned_expenses.dart';
 
-class WrapFilterButtonsForPlannedIncomes extends StatefulWidget {
-  final VoidCallback updatePlannedIncomes;
+class WrapFilterButtonsForPlannedExpenses extends StatefulWidget {
+  final VoidCallback updatePlannedExpenses;
 
-  const WrapFilterButtonsForPlannedIncomes(
-      {super.key, required this.updatePlannedIncomes});
+  const WrapFilterButtonsForPlannedExpenses(
+      {super.key, required this.updatePlannedExpenses});
 
   @override
-  State<WrapFilterButtonsForPlannedIncomes> createState() =>
-      _WrapFilterButtonsForPlannedIncomesState();
+  State<WrapFilterButtonsForPlannedExpenses> createState() =>
+      _WrapFilterButtonsForPlannedExpensesState();
 }
 
-class _WrapFilterButtonsForPlannedIncomesState
-    extends State<WrapFilterButtonsForPlannedIncomes> {
+class _WrapFilterButtonsForPlannedExpensesState
+    extends State<WrapFilterButtonsForPlannedExpenses> {
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -36,9 +36,9 @@ class _WrapFilterButtonsForPlannedIncomesState
                   );
                   if (picked != null) {
                     setState(() {
-                      filterDatesPlannedIncomes[0].startDatePlannedIncomes =
+                      filterDatesPlannedExpenses[0].startDatePlannedExpenses =
                           picked;
-                      filterPlannedIncomes(widget.updatePlannedIncomes);
+                      filterPlannedExpenses(widget.updatePlannedExpenses);
                     });
                   }
                 },
@@ -57,9 +57,9 @@ class _WrapFilterButtonsForPlannedIncomesState
                   );
                   if (picked != null) {
                     setState(() {
-                      filterDatesPlannedIncomes[0].endDatePlannedIncomes =
+                      filterDatesPlannedExpenses[0].endDatePlannedExpenses =
                           picked;
-                      filterPlannedIncomes(widget.updatePlannedIncomes);
+                      filterPlannedExpenses(widget.updatePlannedExpenses);
                     });
                   }
                 },
@@ -72,14 +72,14 @@ class _WrapFilterButtonsForPlannedIncomesState
         ElevatedButton(
           onPressed: () {
             setState(() {
-              filteredPlannedIncomesList = listPlannedIncomes;
-              filterDatesPlannedIncomes = [
-                FilterForPlannedIncomes(
-                    startDatePlannedIncomes:
+              filteredPlannedExpensesList = listPlannedExpenses;
+              filterDatesPlannedExpenses = [
+                FilterForPlannedExpenses(
+                    startDatePlannedExpenses:
                         DateTime.now().subtract(const Duration(days: 1)),
-                    endDatePlannedIncomes: DateTime(2124))
+                    endDatePlannedExpenses: DateTime(2124))
               ];
-              filterPlannedIncomes(widget.updatePlannedIncomes);
+              filterPlannedExpenses(widget.updatePlannedExpenses);
             });
           },
           child: const Text('Сбросить фильтр', textAlign: TextAlign.center),

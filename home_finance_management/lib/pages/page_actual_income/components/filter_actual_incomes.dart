@@ -13,6 +13,5 @@ void filterActualIncomes(Function updateState) {
             actualIncome.dateActualIncomes.isAtSameMomentAs(
                 filterDatesActualIncomes[0].endDateActualIncomes));
   }).toList();
-
   updateState();
 }

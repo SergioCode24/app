@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:home_finance_management/component/database_helper.dart';
+import 'package:home_finance_management/controller/dropdown_button_currency.dart';
 import 'package:home_finance_management/controller/icon_button_menu.dart';
-import 'package:home_finance_management/pages/page_planned_income/controller/dropdown_button_currency_for_planned_incomes.dart';
 import 'package:home_finance_management/pages/page_planned_income/controller/elevated_button_save_planned_incomes.dart';
 import 'package:home_finance_management/pages/page_planned_income/controller/elevated_button_select_date_planned_incomes.dart';
 import 'package:home_finance_management/controller/drawer_menu.dart';
@@ -65,8 +65,7 @@ class _ViewPlannedIncomeState extends State<ViewPlannedIncome> {
           actualIncomePage: true,
           actualExpensesPage: true,
           plannedIncomePage: false,
-          plannedExpensesPage: true,
-          statisticsPage: true),
+          plannedExpensesPage: true),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
@@ -82,7 +81,7 @@ class _ViewPlannedIncomeState extends State<ViewPlannedIncome> {
                                 textControllerPlannedIncomes,
                             keyboardType: TextInputType.number),
                       ),
-                      const DropdownButtonCurrencyForPlannedIncomes(),
+                      const DropdownButtonCurrency(),
                     ],
                   ),
                   Row(children: [
