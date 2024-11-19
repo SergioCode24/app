@@ -27,12 +27,30 @@ class _WrapFilterButtonsForActualIncomesState
           children: [
             Expanded(
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: const WidgetStatePropertyAll(Colors.white24),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: const BorderSide(color: Colors.white),
+                    ),
+                  ),
+                ),
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime.now(),
+                    locale: const Locale('ru'),
+                    builder: (BuildContext context, Widget? child) {
+                      return Theme(
+                        data: ThemeData.light().copyWith(
+                          colorScheme: const ColorScheme.dark(),
+                        ),
+                        child: child!,
+                      );
+                    },
                   );
                   if (picked != null) {
                     setState(() {
@@ -42,18 +60,39 @@ class _WrapFilterButtonsForActualIncomesState
                     });
                   }
                 },
-                child: const Text('Выбрать начальную дату',
-                    textAlign: TextAlign.center),
+                child: const Text(
+                  'Выбрать начальную дату',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
             Expanded(
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: const WidgetStatePropertyAll(Colors.white24),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: const BorderSide(color: Colors.white),
+                    ),
+                  ),
+                ),
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime.now(),
+                    locale: const Locale('ru'),
+                    builder: (BuildContext context, Widget? child) {
+                      return Theme(
+                        data: ThemeData.light().copyWith(
+                          colorScheme: const ColorScheme.dark(),
+                        ),
+                        child: child!,
+                      );
+                    },
                   );
                   if (picked != null) {
                     setState(() {
@@ -62,25 +101,41 @@ class _WrapFilterButtonsForActualIncomesState
                     });
                   }
                 },
-                child: const Text('Выбрать конечную дату',
-                    textAlign: TextAlign.center),
+                child: const Text(
+                  'Выбрать конечную дату',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ],
         ),
         ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: const WidgetStatePropertyAll(Colors.white24),
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: const BorderSide(color: Colors.white),
+              ),
+            ),
+          ),
           onPressed: () {
             setState(() {
               filteredActualIncomesList = listActualIncomes;
               filterDatesActualIncomes = [
                 FilterForActualIncomes(
-                    startDateActualIncomes: DateTime(2000, 1, 1),
+                    startDateActualIncomes: DateTime(2000),
                     endDateActualIncomes: DateTime.now())
               ];
               filterActualIncomes(widget.updateActualIncomes);
             });
           },
-          child: const Text('Сбросить фильтр', textAlign: TextAlign.center),
+          child: const Text(
+            'Сбросить фильтр',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ],
     );

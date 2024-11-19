@@ -49,13 +49,18 @@ class _ViewActualIncomeState extends State<ViewActualIncome> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: const Text(
           "Фактические доходы",
           style: TextStyle(
+            color: Colors.green,
             fontSize: 25,
           ),
         ),
-        backgroundColor: Colors.grey,
+        leading: const Icon(
+          Icons.trending_up,
+          color: Colors.green,
+        ),
         centerTitle: true,
         actions: [
           IconButtonMenu(scaffoldKey: _scaffoldKey),
@@ -68,7 +73,8 @@ class _ViewActualIncomeState extends State<ViewActualIncome> {
           plannedExpensesPage: true),
       body: isLoadingActualIncomes
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
+          : Container(
+              color: Colors.black,
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
@@ -76,10 +82,8 @@ class _ViewActualIncomeState extends State<ViewActualIncome> {
                     children: [
                       Expanded(
                         child: TextFieldEnterForActualIncomes(
-                            labelText: 'Введите доход',
                             textControllerActualIncomes:
-                                textControllerActualIncomes,
-                            keyboardType: TextInputType.number),
+                                textControllerActualIncomes),
                       ),
                       const DropdownButtonCurrency(),
                     ],

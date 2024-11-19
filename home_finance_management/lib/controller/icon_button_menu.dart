@@ -8,7 +8,7 @@ class IconButtonMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.menu),
+      icon: const Icon(Icons.menu, color: Colors.white,),
       onPressed: () {
         scaffoldKey.currentState?.openEndDrawer();
       },

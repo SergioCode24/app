@@ -13,7 +13,10 @@ class TextButtonCancel extends StatelessWidget {
         selectedCurrency = tempSelectedCurrency;
         Navigator.of(context).pop();
       },
-      child: const Text('Отмена'),
+      child: const Text(
+        'Отмена',
+        style: TextStyle(color: Colors.deepPurpleAccent),
+      ),
     );
   }
 }

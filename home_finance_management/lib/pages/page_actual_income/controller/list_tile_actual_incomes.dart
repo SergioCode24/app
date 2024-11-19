@@ -39,14 +39,22 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-          '${filteredActualIncomesList[widget.index].sumActualIncomes} рублей'),
-      subtitle: Text(DateFormat('d.M.y')
-          .format(filteredActualIncomesList[widget.index].dateActualIncomes)),
+        '${filteredActualIncomesList[widget.index].sumActualIncomes} рублей',
+        style: const TextStyle(color: Colors.white),
+      ),
+      subtitle: Text(
+        DateFormat('d.M.y')
+            .format(filteredActualIncomesList[widget.index].dateActualIncomes),
+        style: const TextStyle(color: Colors.white70),
+      ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon: const Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
             onPressed: () {
               String tempSelectedCurrency = selectedCurrency;
               selectedCurrency = 'RUB';
@@ -60,7 +68,11 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Редактировать доход'),
+                    backgroundColor: Colors.white12,
+                    title: const Text(
+                      'Редактировать доход',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -68,15 +80,25 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
                           children: [
                             Expanded(
                               child: TextFieldEnterForActualIncomes(
-                                  textControllerActualIncomes:
-                                      sumControllerActualIncomes,
-                                  labelText: 'Введите доход',
-                                  keyboardType: TextInputType.number),
+                                textControllerActualIncomes:
+                                    sumControllerActualIncomes,
+                              ),
                             ),
                             const DropdownButtonCurrency()
                           ],
                         ),
                         ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                const WidgetStatePropertyAll(Colors.white24),
+                            shape:
+                                WidgetStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(color: Colors.white),
+                              ),
+                            ),
+                          ),
                           onPressed: () async {
                             final DateTime? picked = await showDatePicker(
                               context: context,
@@ -85,12 +107,24 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
                                       .dateActualIncomes,
                               firstDate: DateTime(2000),
                               lastDate: DateTime.now(),
+                              locale: const Locale('ru'),
+                              builder: (BuildContext context, Widget? child) {
+                                return Theme(
+                                  data: ThemeData.light().copyWith(
+                                    colorScheme: const ColorScheme.dark(),
+                                  ),
+                                  child: child!,
+                                );
+                              },
                             );
                             if (picked != null) {
                               selectedDate = picked;
                             }
                           },
-                          child: const Text('Выбрать дату'),
+                          child: const Text(
+                            'Выбрать дату',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         )
                       ],
                     ),
@@ -150,7 +184,10 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
                           }
                           selectedCurrency = tempSelectedCurrency;
                         },
-                        child: const Text('Сохранить'),
+                        child: const Text(
+                          'Сохранить',
+                          style: TextStyle(color: Colors.deepPurpleAccent),
+                        ),
                       ),
                     ],
                   );
@@ -159,7 +196,10 @@ class _ListTileActualIncomesState extends State<ListTileActualIncomes> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
             onPressed: () async {
               final dbHelper = DatabaseHelper();
               await dbHelper.deleteActualIncome(

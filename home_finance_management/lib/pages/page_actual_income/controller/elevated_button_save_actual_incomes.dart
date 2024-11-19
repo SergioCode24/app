@@ -24,6 +24,15 @@ class _ElevatedButtonSaveActualIncomes
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: const WidgetStatePropertyAll(Colors.white24),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            side: const BorderSide(color: Colors.white),
+          ),
+        ),
+      ),
       onPressed: () async {
         if (textControllerActualIncomes.text.isEmpty) {
           return;
@@ -58,7 +67,10 @@ class _ElevatedButtonSaveActualIncomes
         filterActualIncomes(() {});
         widget.updateActualIncomes();
       },
-      child: const Text('Сохранить'),
+      child: const Text(
+        'Сохранить',
+        style: TextStyle(color: Colors.white),
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:home_finance_management/component/database_helper.dart';
 import 'package:home_finance_management/pages/page_actual_income/view_actual_income.dart';
 
@@ -16,6 +17,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+      ],
       title: 'Управление домашними финансами',
       home: ViewActualIncome(),
     );

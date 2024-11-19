@@ -12,6 +12,8 @@ class _DropdownButtonCurrencyState extends State<DropdownButtonCurrency> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
+      iconEnabledColor: Colors.white,
+      dropdownColor: Colors.black54,
       value: selectedCurrency,
       onChanged: (String? newValue) {
         setState(() {
@@ -22,7 +24,10 @@ class _DropdownButtonCurrencyState extends State<DropdownButtonCurrency> {
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Text(value),
+          child: Text(
+            value,
+            style: const TextStyle(color: Colors.white),
+          ),
         );
       }).toList(),
     );

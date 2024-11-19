@@ -60,10 +60,14 @@ class _ViewPlannedExpensesState extends State<ViewPlannedExpenses> {
         title: const Text(
           "Запланированные расходы",
           style: TextStyle(
-            fontSize: 25,
+            color: Colors.red,
+            fontSize: 21,
           ),
         ),
-        backgroundColor: Colors.grey,
+        leading: const Icon(
+          Icons.schedule,
+          color: Colors.red,
+        ),
         centerTitle: true,
         actions: [
           IconButtonMenu(scaffoldKey: _scaffoldKey),

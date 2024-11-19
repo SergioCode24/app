@@ -20,6 +20,7 @@ class DrawerMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Colors.black,
       child: Column(
         children: [
           const SizedBox(
@@ -28,14 +29,21 @@ class DrawerMenu extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Text(
                 'Меню',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.trending_up),
+            leading: const Icon(
+              Icons.trending_up,
+              color: Colors.green,
+            ),
             title: const Text(
               'Фактические доходы',
+              style: TextStyle(color: Colors.white),
             ),
             onTap: () {
               if (actualIncomePage == true) {
@@ -51,9 +59,13 @@ class DrawerMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.trending_down),
+            leading: const Icon(
+              Icons.trending_down,
+              color: Colors.red,
+            ),
             title: const Text(
               'Фактические расходы',
+                style: TextStyle(color: Colors.white),
             ),
             onTap: () {
               if (actualExpensesPage == true) {
@@ -69,9 +81,13 @@ class DrawerMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.schedule),
+            leading: const Icon(
+              Icons.schedule,
+              color: Colors.green,
+            ),
             title: const Text(
               'Запланированные доходы',
+                style: TextStyle(color: Colors.white),
             ),
             onTap: () {
               if (plannedIncomePage == true) {
@@ -87,9 +103,13 @@ class DrawerMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.schedule),
+            leading: const Icon(
+              Icons.schedule,
+              color: Colors.red,
+            ),
             title: const Text(
               'Запланированные расходы',
+              style: TextStyle(color: Colors.white),
             ),
             onTap: () {
               if (plannedExpensesPage == true) {

@@ -61,9 +61,13 @@ class _ViewActualExpensesState extends State<ViewActualExpenses> {
           "Фактические расходы",
           style: TextStyle(
             fontSize: 25,
+            color: Colors.red
           ),
         ),
-        backgroundColor: Colors.grey,
+        leading: const Icon(
+          Icons.trending_down,
+          color: Colors.red,
+        ),
         centerTitle: true,
         actions: [
           IconButtonMenu(scaffoldKey: _scaffoldKey),

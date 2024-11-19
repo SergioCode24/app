@@ -52,10 +52,14 @@ class _ViewPlannedIncomeState extends State<ViewPlannedIncome> {
         title: const Text(
           "Запланированные доходы",
           style: TextStyle(
-            fontSize: 25,
+            color: Colors.green,
+            fontSize: 22,
           ),
         ),
-        backgroundColor: Colors.grey,
+        leading: const Icon(
+          Icons.schedule,
+          color: Colors.green,
+        ),
         centerTitle: true,
         actions: [
           IconButtonMenu(scaffoldKey: _scaffoldKey),
