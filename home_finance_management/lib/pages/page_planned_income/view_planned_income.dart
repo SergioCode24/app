@@ -49,6 +49,7 @@ class _ViewPlannedIncomeState extends State<ViewPlannedIncome> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: const Text(
           "Запланированные доходы",
           style: TextStyle(
@@ -72,7 +73,8 @@ class _ViewPlannedIncomeState extends State<ViewPlannedIncome> {
           plannedExpensesPage: true),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
+          : Container(
+              color: Colors.black,
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
@@ -80,10 +82,9 @@ class _ViewPlannedIncomeState extends State<ViewPlannedIncome> {
                     children: [
                       Expanded(
                         child: TextFieldEnterForPlannedIncomes(
-                            labelText: 'Введите доход',
-                            textControllerPlannedIncomes:
-                                textControllerPlannedIncomes,
-                            keyboardType: TextInputType.number),
+                          textControllerPlannedIncomes:
+                              textControllerPlannedIncomes,
+                        ),
                       ),
                       const DropdownButtonCurrency(),
                     ],

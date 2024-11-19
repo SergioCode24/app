@@ -27,12 +27,30 @@ class _WrapFilterButtonsForPlannedIncomesState
           children: [
             Expanded(
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: const WidgetStatePropertyAll(Colors.white24),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: const BorderSide(color: Colors.white),
+                    ),
+                  ),
+                ),
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate: DateTime.now(),
                     lastDate: DateTime(2124),
+                    locale: const Locale('ru'),
+                    builder: (BuildContext context, Widget? child) {
+                      return Theme(
+                        data: ThemeData.light().copyWith(
+                          colorScheme: const ColorScheme.dark(),
+                        ),
+                        child: child!,
+                      );
+                    },
                   );
                   if (picked != null) {
                     setState(() {
@@ -42,18 +60,39 @@ class _WrapFilterButtonsForPlannedIncomesState
                     });
                   }
                 },
-                child: const Text('Выбрать начальную дату',
-                    textAlign: TextAlign.center),
+                child: const Text(
+                  'Выбрать начальную дату',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
             Expanded(
               child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: const WidgetStatePropertyAll(Colors.white24),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      side: const BorderSide(color: Colors.white),
+                    ),
+                  ),
+                ),
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate: DateTime.now(),
                     lastDate: DateTime(2124),
+                    locale: const Locale('ru'),
+                    builder: (BuildContext context, Widget? child) {
+                      return Theme(
+                        data: ThemeData.light().copyWith(
+                          colorScheme: const ColorScheme.dark(),
+                        ),
+                        child: child!,
+                      );
+                    },
                   );
                   if (picked != null) {
                     setState(() {
@@ -63,13 +102,25 @@ class _WrapFilterButtonsForPlannedIncomesState
                     });
                   }
                 },
-                child: const Text('Выбрать конечную дату',
-                    textAlign: TextAlign.center),
+                child: const Text(
+                  'Выбрать конечную дату',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ],
         ),
         ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: const WidgetStatePropertyAll(Colors.white24),
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: const BorderSide(color: Colors.white),
+              ),
+            ),
+          ),
           onPressed: () {
             setState(() {
               filteredPlannedIncomesList = listPlannedIncomes;
@@ -82,7 +133,11 @@ class _WrapFilterButtonsForPlannedIncomesState
               filterPlannedIncomes(widget.updatePlannedIncomes);
             });
           },
-          child: const Text('Сбросить фильтр', textAlign: TextAlign.center),
+          child: const Text(
+            'Сбросить фильтр',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ],
     );

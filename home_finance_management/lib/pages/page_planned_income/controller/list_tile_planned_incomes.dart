@@ -39,14 +39,22 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-          '${filteredPlannedIncomesList[widget.index].sumPlannedIncomes} рублей'),
-      subtitle: Text(DateFormat('d.M.y')
-          .format(filteredPlannedIncomesList[widget.index].datePlannedIncomes)),
+        '${filteredPlannedIncomesList[widget.index].sumPlannedIncomes} рублей',
+        style: const TextStyle(color: Colors.white),
+      ),
+      subtitle: Text(
+        DateFormat('d.M.y').format(
+            filteredPlannedIncomesList[widget.index].datePlannedIncomes),
+        style: const TextStyle(color: Colors.white70),
+      ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon: const Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
             onPressed: () {
               String tempSelectedCurrency = selectedCurrency;
               selectedCurrency = 'RUB';
@@ -60,7 +68,11 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    title: const Text('Редактировать доход'),
+                    backgroundColor: Colors.white12,
+                    title: const Text(
+                      'Редактировать доход',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -69,14 +81,23 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
                             Expanded(
                               child: TextFieldEnterForPlannedIncomes(
                                   textControllerPlannedIncomes:
-                                      sumControllerPlannedIncomes,
-                                  labelText: 'Введите доход',
-                                  keyboardType: TextInputType.number),
+                                      sumControllerPlannedIncomes,),
                             ),
                             const DropdownButtonCurrency()
                           ],
                         ),
                         ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                            const WidgetStatePropertyAll(Colors.white24),
+                            shape:
+                            WidgetStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(color: Colors.white),
+                              ),
+                            ),
+                          ),
                           onPressed: () async {
                             final DateTime? picked = await showDatePicker(
                               context: context,
@@ -85,12 +106,24 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
                                       .datePlannedIncomes,
                               firstDate: DateTime.now(),
                               lastDate: DateTime(2124),
+                              locale: const Locale('ru'),
+                              builder: (BuildContext context, Widget? child) {
+                                return Theme(
+                                  data: ThemeData.light().copyWith(
+                                    colorScheme: const ColorScheme.dark(),
+                                  ),
+                                  child: child!,
+                                );
+                              },
                             );
                             if (picked != null) {
                               selectedDate = picked;
                             }
                           },
-                          child: const Text('Выбрать дату'),
+                          child: const Text(
+                            'Выбрать дату',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         )
                       ],
                     ),
@@ -151,7 +184,10 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
                           }
                           selectedCurrency = tempSelectedCurrency;
                         },
-                        child: const Text('Сохранить'),
+                        child: const Text(
+                          'Сохранить',
+                          style: TextStyle(color: Colors.deepPurpleAccent),
+                        ),
                       ),
                     ],
                   );
@@ -160,7 +196,10 @@ class _ListTilePlannedIncomesState extends State<ListTilePlannedIncomes> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
             onPressed: () async {
               final dbHelper = DatabaseHelper();
               await dbHelper.deletePlannedIncome(

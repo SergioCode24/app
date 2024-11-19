@@ -45,12 +45,15 @@ class _ListTileActualExpensesState extends State<ListTileActualExpenses> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-          '${filteredActualExpensesList[widget.index].sumActualExpenses} рублей'),
+        '${filteredActualExpensesList[widget.index].sumActualExpenses} рублей',
+        style: const TextStyle(color: Colors.white),
+      ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-              'Категория: ${filteredActualExpensesList[widget.index].categoryActualExpenses}'),
+              'Категория: ${filteredActualExpensesList[widget.index].categoryActualExpenses}',
+          ),
           Text(DateFormat('d.M.y').format(
               filteredActualExpensesList[widget.index].dateActualExpenses)),
         ],
